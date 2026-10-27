@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="utf-8">
+<title>Հուշումներ և հնարքներ մենթորի համար — AI Discover</title>
+<style>
+  @page { size: A4; margin: 16mm 16mm 18mm 16mm; }
+  :root {
+    --navy: #0b2545; --ink: #1c2430; --muted: #5b6676; --line: #d9dee6;
+    --accent: #1f7a8c; --accent-soft: #e6f2f5; --amber: #c9842b; --amber-soft: #fbf1e3;
+    --bg-soft: #f4f6f9; --red-soft: #fbe9e7; --red: #b3412f; --green-soft: #e8f4ea; --green: #2f7a44;
+    --violet: #5b4b8a; --violet-soft: #eeeaf7;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", "Arial", sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.42; }
+  h1, h2, h3, h4 { margin: 0; font-weight: 600; color: var(--navy); page-break-after: avoid; }
+  p { margin: 0 0 6pt 0; }
+  ul, ol { margin: 0 0 6pt 0; padding-left: 15pt; }
+  li { margin: 0 0 2.5pt 0; }
+  b { color: var(--navy); }
+  .page { page-break-after: always; }
+  .np { page-break-before: always; }
+  .avoid { page-break-inside: avoid; }
+
+  .cover { height: 257mm; display: flex; flex-direction: column; justify-content: space-between; }
+  .brand { font-size: 10pt; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .cover-main { margin-top: 50mm; }
+  .cover h1 { font-size: 30pt; line-height: 1.15; margin-bottom: 10pt; }
+  .cover .sub { font-size: 13pt; color: var(--muted); max-width: 158mm; margin-bottom: 22pt; }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6pt 18pt; max-width: 160mm; }
+  .meta div { border-top: 1px solid var(--line); padding-top: 5pt; }
+  .meta .k { font-size: 8.5pt; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .meta .v { font-size: 11pt; font-weight: 600; color: var(--navy); }
+  .cover-foot { font-size: 9pt; color: var(--muted); border-top: 2px solid var(--navy); padding-top: 8pt; display: flex; justify-content: space-between; }
+  .axes-cover { display: flex; gap: 8pt; margin-top: 18pt; }
+  .axes-cover span { font-size: 9pt; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4pt 9pt; border-radius: 4pt; }
+
+  .sec { font-size: 9pt; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 18pt 0 3pt 0; page-break-after: avoid; }
+  .sec.first { margin-top: 0; }
+  h2 { font-size: 18pt; margin-bottom: 8pt; }
+  h3 { font-size: 12.4pt; margin: 12pt 0 5pt 0; page-break-after: avoid; }
+  h4 { font-size: 10.8pt; margin: 8pt 0 3pt 0; }
+  .lead { font-size: 10.8pt; margin-bottom: 8pt; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9.5pt; table-layout: fixed; margin: 4pt 0 8pt 0; }
+  th, td { text-align: left; padding: 4pt 7pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 600; font-size: 8.8pt; letter-spacing: .04em; }
+  tr { page-break-inside: avoid; }
+  table tr:first-child { page-break-after: avoid; break-after: avoid; }
+  tr:nth-child(even) td { background: var(--bg-soft); }
+  td.b { font-weight: 600; color: var(--navy); }
+  td.no { color: var(--red); }
+  table.timing td:first-child { font-weight: 600; color: var(--navy); white-space: nowrap; }
+
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 7pt; margin: 4pt 0 8pt 0; }
+  .cards3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7pt; margin: 4pt 0 8pt 0; }
+  .card { border: 1px solid var(--line); border-radius: 6pt; padding: 8pt 10pt; page-break-inside: avoid; }
+  .card .n { font-size: 8.8pt; color: var(--accent); font-weight: 700; margin-bottom: 2pt; }
+  .card h4 { font-size: 10.6pt; margin: 0 0 3pt 0; }
+  .card p, .card li { font-size: 9.5pt; margin: 0; }
+  .card ul { margin: 2pt 0 0 0; padding-left: 12pt; }
+
+  .axes { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 7pt; margin: 6pt 0 10pt 0; }
+  .axes div { border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 6pt; padding: 8pt 9pt; font-size: 9.3pt; page-break-inside: avoid; }
+  .axes b { display: block; font-size: 11pt; margin-bottom: 3pt; }
+  .axes .e { border-top-color: var(--green); } .axes .e b { color: var(--green); }
+  .axes .i { border-top-color: var(--amber); } .axes .i b { color: var(--amber); }
+  .axes .c { border-top-color: var(--violet); } .axes .c b { color: var(--violet); }
+  .axes .p b { color: var(--accent); }
+
+  .hack { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 6pt 6pt 0; padding: 7pt 10pt 6pt 10pt; margin: 0 0 7pt 0; page-break-inside: avoid; }
+  .hack h4 { margin: 0 0 2pt 0; font-size: 10.6pt; }
+  .hack p { margin: 0; font-size: 9.6pt; }
+  .hack.e { border-left-color: var(--green); } .hack.i { border-left-color: var(--amber); } .hack.c { border-left-color: var(--violet); }
+  .hacks2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8pt; }
+
+  .tag { display: inline-block; font-size: 7.6pt; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; padding: 1pt 5pt; border-radius: 3pt; margin-left: 4pt; vertical-align: middle; }
+  .tp { background: var(--accent-soft); color: var(--accent); }
+  .te { background: var(--green-soft); color: var(--green); }
+  .ti { background: var(--amber-soft); color: var(--amber); }
+  .tc { background: var(--violet-soft); color: var(--violet); }
+
+  .box { background: var(--bg-soft); border-left: 3px solid var(--accent); padding: 7pt 10pt; border-radius: 0 5pt 5pt 0; margin: 6pt 0 8pt 0; font-size: 9.8pt; page-break-inside: avoid; }
+  .box.warn { background: var(--amber-soft); border-color: var(--amber); }
+  .box.good { background: var(--green-soft); border-color: var(--green); }
+  .box.red { background: var(--red-soft); border-color: var(--red); }
+  .box b { display: block; margin-bottom: 2pt; }
+  .box ul, .box ol { margin-bottom: 0; }
+
+  .pr { background: #fffdf7; border: 1px solid #e6d9b8; border-radius: 6pt; padding: 6pt 9pt 7pt 9pt; margin: 5pt 0 8pt 0; font-size: 9.4pt; page-break-inside: avoid; white-space: pre-line; }
+  .pr .t { display: block; white-space: normal; font-size: 8.4pt; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); font-weight: 700; margin-bottom: 3pt; }
+
+  .wow { display: grid; grid-template-columns: 1fr 1fr; gap: 7pt; margin: 4pt 0 8pt 0; }
+  .wow > div { border: 1px solid #ead9b9; border-top: 3px solid var(--amber); border-radius: 6pt; padding: 7pt 10pt; font-size: 9.4pt; page-break-inside: avoid; background: #fffdf8; }
+  .wow .n { font-size: 8.4pt; color: var(--amber); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .wow b { display: block; font-size: 10.4pt; margin: 1pt 0 2pt 0; }
+
+  .princ { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7pt; margin: 4pt 0 8pt 0; }
+  .princ div { background: var(--accent-soft); border-radius: 6pt; padding: 8pt 10pt; font-size: 9.5pt; page-break-inside: avoid; }
+  .princ b { display: block; margin-bottom: 2pt; }
+
+  kbd { font-family: Consolas, "Courier New", monospace; font-size: 8.6pt; background: #f1f3f6; border: 1px solid #c9cfd8; border-bottom-width: 2px; border-radius: 3pt; padding: 0 4pt; white-space: nowrap; color: var(--navy); }
+
+  .cheat { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 7pt; margin: 6pt 0 8pt 0; }
+  .cheat div { border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 6pt; padding: 8pt 9pt; font-size: 9.2pt; page-break-inside: avoid; }
+  .cheat b { display: block; font-size: 10.5pt; margin-bottom: 4pt; }
+  .cheat ul { padding-left: 11pt; margin: 0; }
+  .cheat li { margin-bottom: 3pt; }
+  .cheat .e { border-top-color: var(--green); } .cheat .e b { color: var(--green); }
+  .cheat .i { border-top-color: var(--amber); } .cheat .i b { color: var(--amber); }
+  .cheat .c { border-top-color: var(--violet); } .cheat .c b { color: var(--violet); }
+  .cheat .p b { color: var(--accent); }
+  .cheat2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7pt; margin: 0 0 8pt 0; }
+  .cheat2 div { background: var(--bg-soft); border-radius: 6pt; padding: 7pt 10pt; font-size: 9.3pt; page-break-inside: avoid; }
+  .cheat2 b { display: block; margin-bottom: 2pt; }
+
+  .handout { border: 2px solid var(--navy); border-radius: 8pt; padding: 12pt 14pt 8pt 14pt; margin-top: 6pt; page-break-inside: avoid; }
+  .handout h2 { font-size: 17pt; margin-bottom: 2pt; }
+  .handout .sub { color: var(--muted); font-size: 9.6pt; margin-bottom: 8pt; }
+  .handout h4 { font-size: 10.2pt; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 8pt 0 3pt 0; }
+  .handout ul { padding-left: 13pt; margin-bottom: 2pt; }
+  .handout li { font-size: 9.5pt; margin-bottom: 2.5pt; }
+  .handout .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14pt; }
+  .handout .foot { margin-top: 8pt; padding-top: 6pt; border-top: 1px solid var(--line); font-size: 8.8pt; color: var(--muted); display: flex; justify-content: space-between; }
+
+  .small { font-size: 9pt; color: var(--muted); }
+  .foot { margin-top: 14pt; padding-top: 8pt; border-top: 2px solid var(--navy); font-size: 9pt; color: var(--muted); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="page cover">
+  <div class="brand">Steply · ներքին փաստաթուղթ</div>
+  <div class="cover-main">
+    <h1>Հուշումներ և հնարքներ<br>մենթորի համար</h1>
+    <div class="sub">Ինչպես դարձնել ուսուցումն արդյունավետ, հեշտ, տպավորիչ և ստեղծագործ՝ ամբողջ դասընթացի ընթացքում և յուրաքանչյուր առցանց պարապմունքի ժամանակ։ Լրացնում է «Մենթորի ուղեցույցը»․ այնտեղ՝ կանոններն ու կառուցվածքը, այստեղ՝ գործնական հնարքները։</div>
+    <div class="meta">
+      <div><div class="k">Ում համար</div><div class="v">Steply-ի մենթոր</div></div>
+      <div><div class="k">Դասընթաց</div><div class="v">AI Discover, անհատական, 3 ամիս</div></div>
+      <div><div class="k">Ամսաթիվ</div><div class="v">2026 թ. հոկտեմբերի 27</div></div>
+      <div><div class="k">Տարբերակ</div><div class="v">1.0 · լրացնում է Մենթորի ուղեցույցը</div></div>
+    </div>
+    <div class="axes-cover">
+      <span style="background:var(--accent-soft);color:var(--accent)">Արդյունավետ</span>
+      <span style="background:var(--green-soft);color:var(--green)">Հեշտ</span>
+      <span style="background:var(--amber-soft);color:var(--amber)">Տպավորիչ</span>
+      <span style="background:var(--violet-soft);color:var(--violet)">Ստեղծագործ</span>
+    </div>
+  </div>
+  <div class="cover-foot">
+    <span>Steply — AI ավտոմատացում և ծրագրային մշակում, Երևան</span>
+    <span>steply.tech</span>
+  </div>
+</section>
+
+<!-- 01 -->
+<section>
+  <div class="sec first">01 · Ինչպես օգտվել</div>
+  <h2>Չորս առանցք և մեկ կանոն</h2>
+  <p class="lead">«Մենթորի ուղեցույցը» պատասխանում է «ի՞նչ անել» հարցին։ Այս փաստաթուղթը պատասխանում է «ինչպե՞ս անել այնպես, որ ստացվի ավելի լավ, ավելի արագ և ավելի հաճելի»։ Այստեղ կանոններ չկան, կան փորձված հնարքներ։ Ընտրեք երեքը, կիրառեք այս շաբաթ, հետո ավելացրեք հաջորդները։</p>
+
+  <div class="axes">
+    <div class="p"><b>Արդյունավետ</b>Ժամանակը ծախսվում է արդյունքի վրա, ոչ թե որոնման, սպասելու և կրկնելու։ Հնարքները՝ 02, 03 և 09 բաժիններում։</div>
+    <div class="e"><b>Հեշտ</b>Նորը ներկայացվում է ծանոթի միջոցով, մեկ քայլով, առանց վախի։ Հնարքները՝ 04, 07 և 08 բաժիններում։</div>
+    <div class="i"><b>Տպավորիչ</b>Յուրաքանչյուր պարապմունքում կա պահ, որի մասին նա կպատմի գործընկերներին։ Հնարքները՝ 05 բաժնում։</div>
+    <div class="c"><b>Ստեղծագործ</b>Ձևաչափերը փոխվում են, վարժությունները խաղի են նման, պրոմպտները՝ փորձերի։ Հնարքները՝ 06 բաժնում։</div>
+  </div>
+
+  <div class="box warn"><b>Մեկ հնարք՝ մեկ պարապմունքում</b>Այս փաստաթղթից ամեն անգամ վերցրեք մեկ նոր բան, ոչ թե տասը։ Հնարքը, որը փորձել եք երեք անգամ, դառնում է սովորություն։ Տասը հնարք միանգամից փորձելիս ոչ մեկը չի դառնում։</div>
+
+  <h3>Տասը հնարք, որոնք կարող եք կիրառել արդեն հաջորդ պարապմունքին</h3>
+  <div class="cards">
+    <div class="card"><div class="n">01</div><h4>Սկսեք վերջից</h4><p>Առաջին 3 րոպեում ցույց տվեք պատրաստի արդյունքը, որին գնում եք։ Ուղեղը սովորում է, երբ գիտի, թե ուր է գնում։</p></div>
+    <div class="card"><div class="n">02</div><h4>Պրոմպտները՝ ֆայլից, ոչ թե ստեղնաշարից</h4><p>Երկար պրոմպտ ուղիղ եթերում մի մեքենագրեք, պատճենեք պատրաստից։ Խնայում է 10 րոպե և նյարդեր։</p></div>
+    <div class="card"><div class="n">03</div><h4>«Հարցերի կայանատեղի»</h4><p>Ամեն հարց, որը թեմայից շեղում է, գրեք ընդհանուր փաստաթղթի վերջում։ Պատասխանեք վերջին 5 րոպեում կամ չաթում։</p></div>
+    <div class="card"><div class="n">04</div><h4>«Ո՞ւմ մոտ է մկնիկը»</h4><p>Էկրանի փոխանցումն ասեք բառերով․ «Հիմա Դուք եք վարում»։ Առանց հստակ փոխանցման երկուսդ էլ սպասում եք միմյանց։</p></div>
+    <div class="card"><div class="n">05</div><h4>Ժամաչափ՝ էկրանին</h4><p>«Ինքը» փուլի համար՝ տեսանելի 15 րոպեանոց ժամաչափ։ Սահմանափակ ժամանակը կենտրոնացնում է, անսահմանը՝ թուլացնում։</p></div>
+    <div class="card"><div class="n">06</div><h4>Մեկ տերմին՝ մեկ համեմատություն</h4><p>Նոր բառը ներմուծեք միայն կենցաղային համեմատությամբ և միանգամից գրանցեք նրա բառարանում։ Պատրաստի բանկը՝ 04 բաժնում։</p></div>
+    <div class="card"><div class="n">07</div><h4>«Գտեք սխալը»</h4><p>Ամեն պարապմունքի մեկ արդյունքում նախապես թաքցրեք սխալ և խնդրեք գտնել։ Ուշադրության լավագույն վարժությունն է։</p></div>
+    <div class="card"><div class="n">08</div><h4>Ամփոփման հաղորդագրություն՝ 10 րոպեում</h4><p>Պարապմունքից հետո հինգ տող՝ ինչ արեցինք, ինչ պրոմպտ ավելացավ, հանձնարարություն, հաջորդ օր։ Ամենատպավորիչ «անտեսանելի» քայլն է։</p></div>
+    <div class="card"><div class="n">09</div><h4>«Խնայված ժամանակ» հաշվիչ</h4><p>Առաջընթացի աղյուսակում ավելացրեք սյունակ՝ քանի րոպե է խնայում ամեն նոր հմտություն։ Գումարն ամսվա վերջում ներկայացրեք նրան։</p></div>
+    <div class="card"><div class="n">10</div><h4>Ձևաչափերի հերթափոխ</h4><p>Ամեն երրորդ պարապմունքին փոխեք ձևաչափը՝ մրցույթ, դետեկտիվ, հակառակ դեր։ Կանխատեսելի կառուցվածք, անկանխատեսելի ձև։</p></div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section>
+  <div class="sec first">02 · Պարապմունքից առաջ</div>
+  <h2>Նախապատրաստման հնարքներ՝ 20 րոպե, որոնք խնայում են 40</h2>
+  <p class="lead">Լավ պարապմունքն սկսվում է զանգից մեկ օր առաջ։ Ոչ թե ժամերով պատրաստվելու, այլ ճիշտ 20 րոպե՝ հստակ հերթականությամբ։ Ամբողջական տեխնիկական ստուգաթերթը մնում է ուղեցույցի 08 և 12 բաժիններում․ այստեղ՝ միայն այն, ինչ արագացնում է։</p>
+
+  <h3>Քսան րոպեանոց ծեսը</h3>
+  <table class="timing">
+    <tr><th style="width:16%">Րոպե</th><th style="width:50%">Քայլ</th><th>Ինչ է ստացվում</th></tr>
+    <tr><td>0–3</td><td>Նայեք նախորդ պարապմունքի տողն առաջընթացի աղյուսակում և նրա հանձնարարությունը։</td><td>Հիշում եք, թե որտեղ կանգ առաք։ Հետադարձ կապը պատրաստ է։</td></tr>
+    <tr><td>3–8</td><td>AI-ով (09 բաժնի առաջին պրոմպտ) կազմեք պարապմունքի մեկ էջանոց պլանը՝ աշխատանքային տետրի համապատասխան պարապմունքից։</td><td>Նպատակ, չորս բլոկ, հանձնարարություն՝ մեկ էջում։</td></tr>
+    <tr><td>8–13</td><td>Պատրաստեք «վերջնական արդյունքը»՝ աղյուսակը, տեքստը կամ սցենարը, որը ցույց կտաք առաջին 3 րոպեում։</td><td>Նա տեսնում է, թե ուր է գնում։</td></tr>
+    <tr><td>13–17</td><td>Պրոմպտները պատճենեք մեկ տեքստային ֆայլ՝ հերթականությամբ։ Ուսումնական ֆայլերը բացեք ներդիրներում։</td><td>Ուղիղ եթերում ոչինչ չեք փնտրում։</td></tr>
+    <tr><td>17–20</td><td>Մեկ անգամ արագ «խաղարկեք» ցուցադրումն ուսումնական հաշվում։</td><td>Գիտեք, թե որտեղ է AI-ն այսօր սխալվելու։</td></tr>
+  </table>
+
+  <div class="hacks2">
+    <div class="hack"><h4>«Երկու ներդիրի» կանոն <span class="tag tp">Արդյունավետ</span></h4><p>Ցուցադրման բրաուզերում բաց է ճիշտ այն, ինչ պետք է՝ AI գործիքը և ուսումնական ֆայլը։ Մնացած ամեն ինչ՝ երկրորդ պատուհանում կամ երկրորդ էկրանին։ Տասը ներդիրը ձայնագրության մեջ երևում է որպես քաոս։</p></div>
+    <div class="hack"><h4>Պրոմպտների ֆայլ՝ պատճենելու համար <span class="tag tp">Արդյունավետ</span></h4><p>Մեկ տեքստային ֆայլ կամ Notion էջ՝ պարապմունքի պրոմպտները հերթականությամբ, յուրաքանչյուրը՝ վերնագրով։ Պատճենում եք և տեղադրում։ Windows-ում <kbd>Win</kbd>+<kbd>V</kbd>-ն պահում է վերջին պատճենածները․ միացրեք մեկ անգամ։</p></div>
+    <div class="hack"><h4>Երեք ֆայլ ամեն թեմայի համար <span class="tag te">Հեշտ</span></h4><p>Յուրաքանչյուր թեմայի համար ունեցեք երեք ուսումնական ֆայլ՝ ցուցադրման, «միասին» փուլի և «ինքը» փուլի։ Նույն ֆայլը երեք անգամ օգտագործելը սովորեցնում է հիշել, ոչ թե հասկանալ։</p></div>
+    <div class="hack i"><h4>Հաղորդագրություն՝ երկու ժամ առաջ <span class="tag ti">Տպավորիչ</span></h4><p>Պարապմունքից 2 ժամ առաջ՝ մեկ հաղորդագրություն․ «Այսօր՝ [թեմա]։ Խնդրում եմ բաց ունենալ [գործիք] և [ֆայլ]»։ Խնայում է առաջին 10 րոպեն և ցույց է տալիս, որ Դուք պատրաստ եք։</p></div>
+    <div class="hack i"><h4>Վերջնական արդյունքը՝ նախապես <span class="tag ti">Տպավորիչ</span></h4><p>Ամենատպավորիչ պահը ոչ թե ընթացքն է, այլ արդյունքը։ Բերեք այն պատրաստի․ «Ահա սա ենք անելու 70 րոպեից»։ Դրանից հետո յուրաքանչյուր քայլ իմաստ ունի։</p></div>
+    <div class="hack"><h4>Ժամային գոտին՝ ակնառու <span class="tag tp">Արդյունավետ</span></h4><p>Պրահան Երևանից 2–3 ժամ հետ է։ Օրացույցում պահեք երկու ժամանակը, հաղորդագրություններում գրեք երկուսն էլ․ «18:00 Պրահա / 21:00 Երևան»։ Մեկ շփոթված պարապմունքն ավելի թանկ է, քան երկու թիվ գրելը։</p></div>
+  </div>
+
+  <div class="box"><b>Վերջին 2 րոպեն զանգից առաջ</b>Ծանուցումներն անջատված են, բրաուզերի մասշտաբը՝ 150%, ցուցադրման պատուհանն ընտրված է, ձայնագրությունը՝ տեղային, ջուրը՝ կողքին, պլանը՝ երկրորդ էկրանին։ Հետո՝ մեկ խորը շունչ և ժպիտ․ առաջին 10 վայրկյանը որոշում է պարապմունքի տոնը։</div>
+</section>
+
+<!-- 03 -->
+<section>
+  <div class="sec first">03 · Զանգի ընթացքում</div>
+  <h2>Արդյունավետ 90 րոպե՝ հնարքներ ուղիղ եթերի համար</h2>
+  <p class="lead">Ուղեցույցի 05 բաժինը տալիս է պարապմունքի կառուցվածքը։ Այստեղ՝ այն, ինչ կառուցվածքի ներսում խնայում է րոպեներ և պահում է ուշադրությունը։</p>
+
+  <div class="hacks2">
+    <div class="hack"><h4>«Քարտեզ» 25 րոպեն մեկ</h4><p>Ամեն 25 րոպեն մեկ՝ մեկ նախադասություն․ «Արել ենք X, հիմա Y, մնաց Z»։ Նա միշտ գիտի, թե որտեղ է։ Կորած ուսանողը լռում է, ոչ թե հարցնում։</p></div>
+    <div class="hack"><h4>Ուղիղ եթերի օրագիր</h4><p>Ընդհանուր Google Doc, որը բաց է ամբողջ պարապմունքի ընթացքում՝ այսօրվա նպատակը, փորձած պրոմպտները, գտնված սխալները, հարցերի կայանատեղին։ Վերջում այն արդեն պատրաստի ամփոփում է, իսկ նրա համար՝ հիշողություն։</p></div>
+    <div class="hack"><h4>Պրոմպտը՝ չաթում, ոչ միայն էկրանին</h4><p>Ամեն պրոմպտ, որը ցույց եք տալիս, տեղադրեք նաև Zoom-ի չաթում։ Նա պատճենում է, ոչ թե մեքենագրում Ձեր էկրանից։ Վերջում չաթը պահպանեք և ուղարկեք։</p></div>
+    <div class="hack e"><h4>Երեք ուղղորդող հարց՝ պատրաստ</h4><p>Լռության 20 վայրկյանից հետո՝ հարց, ոչ թե պատասխան։ Պահեք երեքը․ «Ի՞նչ չգիտի մոդելը հիմա», «Ի՞նչ ձևաչափ եք ուզում ստանալ», «Ի՞նչ կասեիք օգնականին այս պահին»։ Երեքից մեկը միշտ աշխատում է։</p></div>
+    <div class="hack"><h4>Մեկ պատուհան՝ մեկ խնդիր</h4><p>Երբ նա է վարում, խնդրեք փակել ամեն ինչ, բացի երկու պատուհանից։ Ուշադրությունը բաժանվում է ներդիրների քանակով։</p></div>
+    <div class="hack"><h4>Ֆայլեր՝ ամսաթվով և թեմայով</h4><p>Առաջին օրվանից ամեն ֆայլ անվանեք այսպես․ «2026-11-05_քաղվածք_աղյուսակ»։ Երկու շաբաթից «որտե՞ղ էր այն ֆայլը» հարցն անհետանում է։</p></div>
+    <div class="hack e"><h4>Սխալը՝ դադարով</h4><p>Երբ AI-ն սխալվում է, մի ուղղեք անմիջապես։ Ասեք․ «Կանգ։ Այստեղ ինչ-որ բան այն չէ։ Կարո՞ղ եք գտնել»։ 30 վայրկյան դադարն ավելի շատ է սովորեցնում, քան 5 րոպե բացատրությունը։</p></div>
+    <div class="hack"><h4>Վերջին 5 րոպեն՝ նա է ասում</h4><p>Ամփոփումը ոչ թե Դուք եք անում, այլ նա՝ երեք նախադասությամբ․ ինչ արեցինք, ինչ պրոմպտ ավելացավ, ինչ կանեմ մինչև հաջորդ անգամ։ Դուք միայն ճշտում եք։</p></div>
+  </div>
+
+  <h3>Ստեղնային համակցություններ, որոնք խնայում են րոպեներ</h3>
+  <p>Սովորեցրեք դրանք ոչ թե ցանկով, այլ մեկ-մեկ՝ հենց այն պահին, երբ պետք է գալիս։ Առաջին պարապմունքին բավական է երեքը․ <kbd>Shift</kbd>+<kbd>Enter</kbd>, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> և <kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>։</p>
+  <table>
+    <tr><th style="width:46%">Գործողություն</th><th style="width:27%">Windows</th><th>Mac</th></tr>
+    <tr><td>Նոր տող պրոմպտում կամ չաթում՝ առանց ուղարկելու</td><td><kbd>Shift</kbd>+<kbd>Enter</kbd></td><td><kbd>Shift</kbd>+<kbd>Enter</kbd></td></tr>
+    <tr><td>Տեղադրել առանց ձևաչափման (մաքուր տեքստ)</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></td></tr>
+    <tr><td>Էկրանի հատվածի սքրինշոթ</td><td><kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>4</kbd></td></tr>
+    <tr><td>Վերջին պատճենածների պատմություն</td><td><kbd>Win</kbd>+<kbd>V</kbd></td><td>Առանձին հավելվածով</td></tr>
+    <tr><td>Պատուհանների միջև անցում</td><td><kbd>Alt</kbd>+<kbd>Tab</kbd></td><td><kbd>Cmd</kbd>+<kbd>Tab</kbd></td></tr>
+    <tr><td>Որոնում AI-ի երկար պատասխանում</td><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td><kbd>Cmd</kbd>+<kbd>F</kbd></td></tr>
+    <tr><td>Բրաուզերի մասշտաբ՝ մեծացնել / փոքրացնել</td><td><kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>Ctrl</kbd>+<kbd>−</kbd></td><td><kbd>Cmd</kbd>+<kbd>+</kbd> / <kbd>Cmd</kbd>+<kbd>−</kbd></td></tr>
+    <tr><td>Խոշորացույց՝ մանրուքը ցույց տալու համար</td><td><kbd>Win</kbd>+<kbd>+</kbd></td><td>Կարգավորումներ → Հասանելիություն → Zoom</td></tr>
+    <tr><td>Zoom՝ էկրանի ցուցադրում սկսել / դադարեցնել</td><td><kbd>Alt</kbd>+<kbd>S</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td></tr>
+    <tr><td>Zoom՝ խոսափողը միացնել / անջատել</td><td><kbd>Alt</kbd>+<kbd>A</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd></td></tr>
+    <tr><td>Zoom՝ չաթը բացել / փակել</td><td><kbd>Alt</kbd>+<kbd>H</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd></td></tr>
+  </table>
+  <div class="box warn"><b>Ամենահաճախ սկսնակի սխալը</b>Պրոմպտի կեսից պատահական <kbd>Enter</kbd>, և կիսատ հարցն ուղարկվում է։ Shift+Enter-ը սովորեցրեք առաջին իսկ պրոմպտի ժամանակ, հետո՝ մի հիշեցրեք․ թող ինքը հիշի։</div>
+</section>
+
+<!-- 04 -->
+<section>
+  <div class="sec first">04 · Հեշտություն</div>
+  <h2>Ինչպես դարձնել բարդը հեշտ</h2>
+  <p class="lead">Հեշտությունը ոչ թե նյութի պարզեցումն է, այլ ճանապարհի։ Նույն բարդ բանը կարելի է տալ երեք քայլով կամ տասնհինգ։ Ստորև՝ հնարքներ, որոնք կրճատում են քայլերը։</p>
+
+  <h3>«Հինգ մատ» պրոմպտի հնարքը</h3>
+  <p>Պրոմպտի հինգ մասը դժվար է հիշել որպես ցանկ, բայց հեշտ՝ որպես ձեռք։ Ցույց տվեք ձեռքը խցիկին և անցեք մատներով։ Երկու շաբաթից նա ինքը կանի դա՝ պրոմպտ գրելուց առաջ։</p>
+  <table>
+    <tr><th style="width:13%">Մատ</th><th style="width:17%">Մաս</th><th style="width:26%">Հարցը, որին պատասխանում է</th><th>Օրինակ</th></tr>
+    <tr><td class="b">Բութ</td><td class="b">Դեր</td><td>Ո՞վ է պատասխանում։</td><td>«Դու դեսպանության հաղորդակցության փորձառու խմբագիր ես»։</td></tr>
+    <tr><td class="b">Ցուցամատ</td><td class="b">Խնդիր</td><td>Ի՞նչ պետք է անել։</td><td>«Գրիր ընդունելության մասին հայտարարության նախագիծ»։</td></tr>
+    <tr><td class="b">Միջնամատ</td><td class="b">Համատեքստ</td><td>Ի՞նչ պետք է իմանալ։</td><td>«Միջոցառումը՝ ..., լսարանը՝ սփյուռք, տոնը՝ պաշտոնական, բայց ջերմ»։</td></tr>
+    <tr><td class="b">Մատնեմատ</td><td class="b">Ձևաչափ</td><td>Ինչպիսի՞ն պետք է լինի արդյունքը։</td><td>«Երեք պարբերություն, մինչև 120 բառ, վերնագրով»։</td></tr>
+    <tr><td class="b">Ճկույթ</td><td class="b">Սահմանափակումներ</td><td>Ի՞նչ չանել։</td><td>«Առանց անունների, առանց ամսաթվերի, առանց բացականչությունների»։</td></tr>
+  </table>
+  <div class="box good"><b>Արագ ախտորոշում</b>Պրոմպտը չաշխատեց՝ հարցրեք․ «Ո՞ր մատն է բաց մնացել»։ Ամենից հաճախ՝ միջնամատը, համատեքստը։ Սա նաև հետադարձ կապի ամենամեղմ ձևն է․ խոսքը մատի մասին է, ոչ թե մարդու։</div>
+
+  <h3>Համեմատությունների բանկ</h3>
+  <p>Ամեն տերմին ներմուծվում է մեկ անգամ՝ կենցաղային համեմատությամբ։ Ահա պատրաստի համեմատություններ, որոնք աշխատում են դիվանագիտական աշխատանքի համատեքստում։</p>
+  <table>
+    <tr><th style="width:22%">Տերմին</th><th style="width:30%">Համեմատություն</th><th>Մեկ նախադասությամբ</th></tr>
+    <tr><td class="b">Պրոմպտ</td><td>Հանձնարարություն նոր օգնականին</td><td>Որքան հստակ է հանձնարարությունը, այնքան քիչ են հարցերն ու սխալները։</td></tr>
+    <tr><td class="b">Լեզվական մոդել</td><td>Շատ կարդացած խորհրդական՝ առանց հիշողության</td><td>Ամեն զրույց սկսում է զրոյից․ գիտի շատ բան, բայց Ձեր գործը՝ ոչ, մինչև չպատմեք։</td></tr>
+    <tr><td class="b">Համատեքստի պատուհան</td><td>Սեղանի մակերեսը</td><td>Որքան սեղանին տեղ կա, այնքան փաստաթուղթ կարելի է միաժամանակ դնել։ Մնացածն ընկնում է հատակին։</td></tr>
+    <tr><td class="b">Հալյուցինացիա</td><td>Ինքնավստահ պրակտիկանտ</td><td>Ավելի շուտ կհորինի, քան կասի «չգիտեմ»։ Թվերն ու մեջբերումները ստուգում ենք միշտ։</td></tr>
+    <tr><td class="b">Թոքեն</td><td>Բառի կտոր, որով հաշվում են</td><td>Ինչպես SMS-ի նիշերը․ հետաքրքիր է միայն այն ժամանակ, երբ սահմանին ենք մոտենում։</td></tr>
+    <tr><td class="b">Ավտոմատացում (Make, n8n)</td><td>Նամակի ձևանմուշ, որն ինքն է լրացվում և ուղարկվում</td><td>Եթե ինչ-որ բան ամեն շաբաթ անում եք նույն կերպ, դա ավտոմատացման թեկնածու է։</td></tr>
+    <tr><td class="b">Պրոմպտների գրադարան</td><td>Բաղադրատոմսերի տետր</td><td>Մեկ անգամ ստացվեց՝ գրեցինք։ Հաջորդ անգամ՝ 2 րոպե, ոչ թե 20։</td></tr>
+    <tr><td class="b">Անոնիմացում</td><td>Փաստաթղթի ուրվագիծ</td><td>Կառուցվածքը մնում է, անուններն ու թվերը փոխվում են։ AI-ն աշխատում է ձևի վրա, ոչ թե բովանդակության։</td></tr>
+  </table>
+</section>
+
+<section>
+  <h3>Պատրաստի ձևակերպումներ ճիշտ պահի համար</h3>
+  <p>Ճիշտ ընտրված նախադասությունը ճիշտ պահին հանում է լարվածությունը։ Պահեք այս ցանկը երկրորդ էկրանին՝ պլանի կողքին։</p>
+  <table>
+    <tr><th style="width:26%">Պահ</th><th style="width:42%">Ասեք</th><th>Մի ասեք</th></tr>
+    <tr><td class="b">Նա կանգնել է</td><td>«Ի՞նչ կասեիք օգնականին հիմա, եթե նա մարդ լիներ»։</td><td class="no">«Պարզապես գրեք…» և թելադրել։</td></tr>
+    <tr><td class="b">AI-ն սխալվեց</td><td>«Հիանալի՛, ահա այն, ինչի համար եկել ենք։ Որտե՞ղ է սխալը»։</td><td class="no">«Հա, երբեմն այդպես է լինում» և անցնել առաջ։</td></tr>
+    <tr><td class="b">Ներողություն է խնդրում դանդաղության համար</td><td>«Դանդաղը լավ է․ առաջին անգամ բոլորն են այդպես անում, երկրորդն արդեն արագ է»։</td><td class="no">«Ոչինչ, ես կանեմ»։</td></tr>
+    <tr><td class="b">Ստացվեց</td><td>«Նկատեցի՞ք, թե որն էր որոշիչ քայլը»։</td><td class="no">«Ապրե՛ք»՝ առանց կոնկրետության։</td></tr>
+    <tr><td class="b">Հարց՝ թեմայից դուրս</td><td>«Լավ հարց է, գրում եմ կայանատեղի, վերջում կպատասխանեմ»։</td><td class="no">Պատասխանել 10 րոպե։</td></tr>
+    <tr><td class="b">Ժամանակը վերջանում է</td><td>«Մնաց 10 րոպե․ կանգ առնենք այստեղ և գրանցենք արդյունքը»։</td><td class="no">«Արագ ևս մեկ բան…»։</td></tr>
+    <tr><td class="b">«Հայերենն անհեթեթություն է»</td><td>«Այո՛, ճիշտ եք։ Հենց դրա համար ունենք խմբագրման պրոմպտ»։</td><td class="no">«Նորմալ է, չէ՞»։</td></tr>
+  </table>
+
+  <div class="hacks2">
+    <div class="hack e"><h4>«Ոչինչ չի կոտրվի»</h4><p>Առաջին պարապմունքին ասեք բացահայտ․ «Ուսումնական հաշիվներում ոչ մի գործողություն հետևանք չունի։ Ctrl+Z-ը միշտ կա, չաթը միշտ կարելի է ջնջել»։ Սեղմելու վախն ամենամեծ արգելակն է։</p></div>
+    <div class="hack e"><h4>Մեկ նախադասություն, մեկ օրինակ</h4><p>Ամեն նոր գաղափար՝ մեկ նախադասությամբ, հետո՝ մեկ օրինակ նրա աշխատանքից։ Եթե օրինակ նրա աշխատանքից չեք գտնում, գաղափարն այսօր պետք չէ։</p></div>
+    <div class="hack e"><h4>Հանձնարարության քարտ՝ հինգ տող</h4><p>Հանձնարարությունն ուղարկեք միշտ նույն ձևով․ Նպատակ / Քայլեր / Արդյունք / Ժամանակ / Թակարդ (որտեղ AI-ն հավանաբար կսխալվի)։ Միևնույն ձևը հանում է «ինչի՞ց սկսել» հարցը։</p></div>
+    <div class="hack e"><h4>Նոր գործիք՝ ծանոթ խնդրի վրա</h4><p>Նոր գործիքը ցույց տվեք ամենածանոթ խնդրի վրա, որն արդեն լուծել եք այլ գործիքով։ Նա համեմատում է, ոչ թե զրոյից սովորում։ Նույն կանոնը՝ հակառակ ուղղությամբ․ նոր խնդիր՝ ծանոթ գործիքով։</p></div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section>
+  <div class="sec first">05 · Տպավորիչ</div>
+  <h2>Զարմանքի պահեր՝ ինչի մասին նա կպատմի գործընկերներին</h2>
+  <p class="lead">Տպավորությունը ոչ թե շոու է, այլ ապացույց․ «սա իրոք աշխատում է իմ գործի վրա»։ Լավ զարմանքի պահը տևում է 3–5 րոպե, անվտանգ է տվյալների տեսանկյունից և անմիջապես կապվում է նրա խնդրի հետ։ Մեկ պարապմունք՝ մեկ պահ, ոչ ավելին։</p>
+
+  <div class="wow">
+    <div><div class="n">01 · Փուլ A</div><b>Ձայնից՝ արձանագրություն</b>Թելադրեք հայերեն 60 վայրկյան հորինված հանդիպման մասին՝ ChatGPT-ի ձայնային ռեժիմով կամ հեռախոսի թելադրանքով։ Խնդրեք դարձնել արձանագրություն՝ որոշումներ, պատասխանատուներ, ժամկետներ՝ աղյուսակով։ Սա նրա ամենօրյա խնդիրն է։</div>
+    <div><div class="n">02 · Փուլ B</div><b>Լուսանկարից՝ աղյուսակ</b>Հորինված անդորրագրի կամ ձեռագիր ցուցակի լուսանկարը բեռնեք և խնդրեք աղյուսակ։ Հետո միտումնավոր ստուգեք գումարը․ մեկ սխալ կլինի։ Երկու դաս՝ մեկում։</div>
+    <div><div class="n">03 · Փուլ A / C</div><b>Մեկ պրոմպտ՝ երեք լեզու</b>Հայտարարության նախագիծ հայերեն, չեխերեն, անգլերեն՝ կողք կողքի աղյուսակով, երեք տոնով։ Հետո հարց․ «Ո՞ր չեխերեն նախադասությունը պետք է ստուգել տալ բնիկին»։ Զարմանք գումարած զգուշություն։</div>
+    <div><div class="n">04 · Փուլ B</div><b>60 էջ՝ 5 հարց</b>Հանրային զեկույց (հրապարակված պետական կամ միջազգային փաստաթուղթ) NotebookLM-ում։ Հինգ հարց, պատասխանները՝ էջերի հղումով։ «Սա ես կարող էի անել երեկ» զգացումը։</div>
+    <div><div class="n">05 · Փուլ B</div><b>Քաոսային ֆայլից՝ գծապատկեր</b>Ուսումնական քաղվածք → Sheets → AI-ով գրված բանաձև → ծախսերն ըստ կատեգորիաների → գծապատկեր։ Չորս րոպե, եթե ֆայլը նախապես պատրաստ է։</div>
+    <div><div class="n">06 · Ամեն փուլ</div><b>«Դետեկտիվ»</b>Ուսումնական հաշվետվության տեքստում նախապես թաքցրեք երեք սխալ։ Խնդրեք AI-ին գտնել։ Կգտնի երկուսը և կհորինի չորրորդը։ Վերլուծեք միասին՝ ինչու։</div>
+    <div><div class="n">07 · Փուլ C</div><b>Տեքստից՝ ներկայացում</b>Gamma-ում մեկ պարբերությունից ութ սլայդ երկու րոպեում։ Հետո ցույց տվեք, թե ինչը պետք է ուղղել ձեռքով։ Արագություն գումարած չափանիշ։</div>
+    <div><div class="n">08 · Փուլ C</div><b>Բրենդային գրառում</b>Canva-ում դեսպանության հանրային ոճով՝ գույներ, տառատեսակ, գրառում երեք լեզվով հինգ րոպեում։ Միայն արդեն հրապարակված նյութերի հիման վրա։</div>
+    <div><div class="n">09 · Փուլ D</div><b>Telegram-ից՝ աղյուսակ, ուղիղ եթերում</b>Make-ի սցենար․ ուղարկում եք հաղորդագրություն թեստային բոտին, տողը հայտնվում է Sheets-ում։ Առաջին ավտոմատացումը, որը նա տեսնում է աշխատելիս։</div>
+    <div><div class="n">10 · Փուլ A</div><b>Թարմ նորություններ՝ աղբյուրներով</b>Perplexity-ում՝ «Չեխիա–Հայաստան հարաբերությունների վերջին 30 օրվա հանրային նորությունները՝ աղբյուրներով»։ Հետո մեկ աղբյուր բացեք միասին և ստուգեք։</div>
+    <div><div class="n">11 · Փուլ A</div><b>«Հորինված մեջբերում»</b>Խնդրեք մեջբերում գոյություն չունեցող հոդվածից։ Մոդելը կհորինի։ Ապա խնդրեք աղբյուրը։ Ամենաանմոռանալի դասը ստուգման մասին։</div>
+    <div><div class="n">12 · Փուլ A / D</div><b>Անձնական օգնական</b>Claude Project կամ Custom GPT՝ «Դեսպանության կոնտենտի օգնական»՝ նրա ոճի կանոններով, առանց իրական տվյալների։ Ամեն նոր զրույց արդեն գիտի նրա տոնը։ Դա արդեն «իր» AI-ն է։</div>
+  </div>
+
+  <div class="box red"><b>Զարմանքի պահերի երեք կանոն</b>Միայն ուսումնական կամ հրապարակված նյութեր։ Մեկ անգամ նախապես փորձված՝ նույն հաշվում, նույն ֆայլով։ Եվ միշտ մեկ ստուգում արդյունքից հետո՝ նրա աչքի առաջ։ Չփորձված զարմանքի պահն ուղիղ եթերում դառնում է հակառակը։</div>
+
+  <h3>Անտեսանելի պրոֆեսիոնալիզմ</h3>
+  <div class="hacks2">
+    <div class="hack i"><h4>Ժամանակը՝ րոպեով</h4><p>Սկսեք ճիշտ ժամին, ավարտեք 2 րոպե շուտ։ Երբեք մի երկարացրեք առանց հարցնելու։ Դիվանագետը ժամանակը գնահատում է ամեն ինչից շատ։</p></div>
+    <div class="hack i"><h4>Խնայված ժամանակի հաշվիչ</h4><p>Առաջընթացի աղյուսակում՝ «Առաջ / Հիմա / Խնայվում է ամսական» սյունակներ։ Ամսվա վերջին ասեք գումարը․ «Այս ամիս՝ 9 ժամ»։ Դա Ձեր դասընթացի արժեքն է՝ նրա լեզվով։</p></div>
+    <div class="hack i"><h4>Շաբաթվա մեկ նորություն</h4><p>Ամեն շաբաթ մեկ րոպե՝ AI-ի մեկ նորություն, որը վերաբերում է պետական կամ դիվանագիտական աշխատանքին։ Միայն ստուգված աղբյուրով։ Դուք դառնում եք նրա անձնական «մամուլի տեսությունը»։</p></div>
+    <div class="hack i"><h4>Մաքուր էկրան</h4><p>Չեզոք աշխատասեղան, մեկ թեմա բրաուզերում, խոշորացված կուրսոր (Windows-ի կարգավորումներում), ցուցադրման ժամանակ անջատված ընդլայնումներ։ Հանգիստ էկրանն ընկալվում է որպես վստահություն։</p></div>
+    <div class="hack i"><h4>Նրա հանրային նյութերը</h4><p>Օրինակների համար վերցրեք դեսպանության հրապարակած գրառումները, հայտարարությունները, լուսանկարները։ Ամեն վարժություն դառնում է «իրենը», իսկ գաղտնիությունը չի խախտվում։</p></div>
+    <div class="hack i"><h4>«Հիշում եմ Ձեր բառերը»</h4><p>Առաջին պարապմունքին գրառած նրա նպատակները մեջբերեք երրորդ և տասներորդ պարապմունքին․ «Դուք ասել էիք, որ…»։ Ոչինչ այնքան չի տպավորում, որքան հիշված մանրուքը։</p></div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="np">
+  <div class="sec first">06 · Ստեղծագործություն</div>
+  <h2>Ձևաչափեր և պրոմպտի հնարքներ, որոնք հանում են ձանձրույթը</h2>
+  <p class="lead">Կառուցվածքը նույնն է ամեն պարապմունքի, բայց ձևը կարող է փոխվել։ Երբ նա չգիտի, թե այսօր ինչ ձևաչափ է, ուշադրությունն ինքն իրեն գալիս է։</p>
+
+  <h3>Ութ ձևաչափ, որոնք կարելի է հերթափոխել</h3>
+  <table>
+    <tr><th style="width:20%">Ձևաչափ</th><th style="width:50%">Ինչպես</th><th>Երբ</th></tr>
+    <tr><td class="b">«Մրցույթ»</td><td>Նույն պրոմպտը երկու գործիքում։ Նա որոշում է հաղթողին և բացատրում՝ ինչու։</td><td>4-րդ պարապմունքից, երբ գործիքներն արդեն ծանոթ են</td></tr>
+    <tr><td class="b">«Դետեկտիվ»</td><td>Արդյունքում թաքցված սխալներ։ Պետք է գտնել բոլորը և ապացուցել, որ ուրիշ չկա։</td><td>Ֆինանսական բլոկում՝ ամեն երկրորդ պարապմունք</td></tr>
+    <tr><td class="b">«Հակառակ դեր»</td><td>Նա սովորեցնում է Ձեզ անցած մեթոդը։ Դուք «սկսնակ» եք, որը սխալ հարցեր է տալիս։</td><td>Ամեն ամսվա վերջին պարապմունք</td></tr>
+    <tr><td class="b">«Սպրինտ»</td><td>10 րոպե ժամաչափով՝ հասնել կոնկրետ արդյունքի, հետո ցույց տալ։</td><td>«Ինքը» փուլի փոխարեն, երբ տեմպ է պետք</td></tr>
+    <tr><td class="b">«Ռեմիքս»</td><td>Նախորդ պարապմունքի պրոմպտը, բայց մեկ փոխված մասով՝ դեր, ձևաչափ կամ սահմանափակում։</td><td>Ամրապնդման համար</td></tr>
+    <tr><td class="b">«Ղեկավարին՝ երեք կետով»</td><td>Ցանկացած արդյունք վերաշարադրել ղեկավարին ներկայացնելու համար՝ երեք կետ, 60 բառ։</td><td>Հաշվետվությունների թեմայում</td></tr>
+    <tr><td class="b">«Օրվա դեպքը»</td><td>Հանրային նորությունից վերցված իրավիճակ, որը լուծում եք AI-ով 15 րոպեում։</td><td>Երբ հանձնարարությունը չի կատարվել և էներգիա է պետք</td></tr>
+    <tr><td class="b">«Ստեղծագործ ուրբաթ»</td><td>Վերջին 10 րոպեն՝ պատկեր, վիդեո կամ երաժշտություն AI-ով, անկախ թեմայից։</td><td>Շաբաթվա երկրորդ պարապմունքին, հատկապես ֆինանսական բլոկում</td></tr>
+  </table>
+
+  <h3>Պրոմպտի հնարքներ, որոնք արժե սովորեցնել</h3>
+  <div class="cards">
+    <div class="card"><div class="n">Հնարք 1</div><h4>«Նախ հարցրու ինձ»</h4><p>Պրոմպտի վերջում․ «Նախքան պատասխանելը տուր ինձ 5 հարց, որոնք կօգնեն ավելի լավ արդյունք տալ»։ Մոդելն ինքն է հավաքում համատեքստը։</p></div>
+    <div class="card"><div class="n">Հնարք 2</div><h4>«Երեք տարբերակ»</h4><p>«Տուր երեք տարբերակ՝ զուսպ, ստանդարտ, համարձակ»։ Ընտրելն ավելի հեշտ է, քան զրոյից ձևակերպելը։</p></div>
+    <div class="card"><div class="n">Հնարք 3</div><h4>«Քննադատիր ինքդ քեզ»</h4><p>Արդյունքից հետո․ «Հիմա գտիր այս պատասխանի երեք թույլ կողմը և ուղղիր»։ Երկրորդ անցումը գրեթե միշտ ավելի լավն է։</p></div>
+    <div class="card"><div class="n">Հնարք 4</div><h4>«Հակառակ պրոմպտ»</h4><p>Ցույց տվեք լավ պատրաստի տեքստ և հարցրեք․ «Ի՞նչ պրոմպտով կարելի էր սա ստանալ»։ Սովորեցնում է պրոմպտի կառուցվածքը հակառակ կողմից։</p></div>
+    <div class="card"><div class="n">Հնարք 5</div><h4>«Քայլ առ քայլ, կանգառներով»</h4><p>«Արա առաջին քայլը և կանգ առ, սպասիր իմ հաստատմանը»։ Երկար խնդիրները վերահսկվում են, սխալները բռնվում են վաղ։</p></div>
+    <div class="card"><div class="n">Հնարք 6</div><h4>«Երեք զույգ աչք»</h4><p>Նույն տեքստը՝ իրավաբանի, լրագրողի և դիվանագետի աչքերով։ Երեք րոպեում՝ երեք տեսանկյուն, նախքան հաստատելը։</p></div>
+    <div class="card"><div class="n">Հնարք 7</div><h4>«Բացատրիր նոր աշխատակցին»</h4><p>«Բացատրիր այնպես, ինչպես նոր աշխատակցին առաջին օրը»։ Ամենաարագ միջոցն է ստուգելու, թե արդյոք ինքն է հասկացել։</p></div>
+    <div class="card"><div class="n">Հնարք 8</div><h4>«Անվանիր պրոմպտը»</h4><p>Գրադարանի ամեն պրոմպտ ունի անուն և տարբերակ․ «Քաղվածք → Աղյուսակ v2»։ Անունով պրոմպտը գործիք է, անանունը՝ պատահականություն։</p></div>
+  </div>
+
+  <div class="hacks2">
+    <div class="hack c"><h4>Մեկ պատկեր՝ մեկ գաղափար</h4><p>Zoom-ի գրատախտակին կամ Excalidraw-ում ձեռքով գծեք երեք ուղղանկյուն և սլաք։ Ձեռքով գծվածը հիշվում է, սլայդը՝ ոչ։</p></div>
+    <div class="hack c"><h4>Մինի նախագիծ՝ ցուցադրելի</h4><p>Ամեն ամիս մեկ արդյունք, որը կարելի է ցույց տալ ղեկավարին կամ գործընկերոջը․ մեկ էջանոց ինֆոգրաֆիկա «AI-ն դեսպանության աշխատանքում» կամ ավտոմատացված հաշվետվության նմուշ։</p></div>
+    <div class="hack c"><h4>Բառարանը՝ իր բառերով</h4><p>Տերմինների սահմանումները գրում է նա, ոչ թե Դուք։ Նրա սխալ սահմանումն ավելի լավ մեկնարկ է, քան Ձեր ճիշտը․ ուղղելը հիշվում է, պատճենելը՝ ոչ։</p></div>
+    <div class="hack c"><h4>Պատահական սահմանափակում</h4><p>Երբեմն ավելացրեք խաղային պայման․ «Նույն արդյունքը, բայց պրոմպտը՝ մինչև 20 բառ» կամ «առանց քաղաքավարական բառերի»։ Սահմանափակումը ստիպում է հասկանալ, թե որն է էականը։</p></div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section>
+  <div class="sec first">07 · Հիշողություն</div>
+  <h2>Ինչպես անել, որ սովորածը մնա</h2>
+  <p class="lead">Պարապմունքին ամեն ինչ պարզ է, մեկ շաբաթ անց՝ ոչ։ Սա նրա թերությունը չէ, այլ հիշողության բնույթը։ Ստորև հնարքները կառուցված են ուսուցման հոգեբանության երեք ապացուցված սկզբունքի վրա։</p>
+
+  <div class="princ">
+    <div><b>Վերհիշում, ոչ թե վերընթերցում</b>Հիշողությունն ամրանում է, երբ դժվարությամբ հանում ես, ոչ թե երբ նորից կարդում ես։ Ամեն պարապմունք սկսեք երեք հարցով՝ առանց նյութերի։</div>
+    <div><b>Բաշխված կրկնություն</b>Երեք անգամ՝ 1, 3 և 7 օր հետո, ավելի ուժեղ է, քան երեք անգամ նույն օրը։ Հանձնարարությունն ու չաթի հարցը հենց դրա գործիքներն են։</div>
+    <div><b>Բացատրություն ուրիշին</b>Ով բացատրում է, նա է սովորում։ «Հակառակ դեր» ձևաչափը և ամփոփումը նրա բառերով հենց դրա համար են։</div>
+  </div>
+
+  <div class="hacks2">
+    <div class="hack e"><h4>«1–3–7»</h4><p>Պարապմունքի օրը՝ գործողություն։ Երրորդ օրը՝ երկու հարց չաթում («Ո՞ր երեք մասն է պարտադիր պրոմպտում»)։ Յոթերորդ օրը՝ նույն հմտությունը նոր խնդրի վրա՝ հաջորդ պարապմունքին։ Երեք հպում, և հմտությունը մնում է։</p></div>
+    <div class="hack e"><h4>Երեք հարց՝ առանց էկրանի</h4><p>Պարապմունքի առաջին 3 րոպեն․ նա փակում է նյութերը և պատասխանում անցածի մասին երեք հարցի։ Սխալ պատասխանը լավ է․ ցույց է տալիս, թե ինչ կրկնել այսօր։</p></div>
+    <div class="hack e"><h4>Սխալների օրագիր</h4><p>Առանձին էջ՝ AI-ի ամեն գտնված սխալ, ամսաթիվ, գործիք, ինչպես հայտնաբերվեց։ Երեք ամսից դա դասընթացի ամենաարժեքավոր փաստաթուղթն է, և նա ինքն է գրել։</p></div>
+    <div class="hack e"><h4>Հիշողության քարտեր AI-ով</h4><p>Պարապմունքի օրագրից AI-ով ստեղծեք հինգ հարց-պատասխան քարտ (09 բաժնի չորրորդ պրոմպտ) և ուղարկեք չաթում։ Նա կարդում է մետրոյում երեք րոպե։</p></div>
+    <div class="hack e"><h4>Հինն ու նորը՝ խառը</h4><p>Նոր թեմայի վարժության մեջ միշտ մեկ քայլ անցած թեմայից․ նոր աղյուսակը մշակելուց առաջ՝ անոնիմացնել 5-րդ պարապմունքի մեթոդով։ Հմտությունները կապվում են, ոչ թե մոռացվում հերթով։</p></div>
+    <div class="hack e"><h4>Նախ ինքն է ուղղում</h4><p>Հանձնարարության հետադարձ կապից առաջ հարցրեք․ «Ի՞նչ կփոխեիք, եթե նորից անեիք»։ Շատ սխալներ նա ինքը կգտնի, և դրանք ավելի լավ կհիշվեն, քան Ձեր նշածները։</p></div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section>
+  <div class="sec first">08 · Էներգիա</div>
+  <h2>Էներգիան և ռիթմն առցանց պարապմունքում</h2>
+  <p class="lead">Իննսուն րոպե էկրանի առջև, հաճախ երեկոյան, աշխատանքային օրից հետո, այլ ժամային գոտում։ Եթե էներգիան չկառավարեք, վերջին 30 րոպեն կորչում է։</p>
+
+  <table class="timing">
+    <tr><th style="width:12%">Րոպե</th><th style="width:40%">Ինչ է կատարվում ուշադրության հետ</th><th>Ինչ անել</th></tr>
+    <tr><td>0–10</td><td>Բարձր, բայց ցրված․ նա դեռ «գալիս է» աշխատանքից։</td><td>Կարճ մուտք, հետո անմիջապես պատրաստի արդյունքը։</td></tr>
+    <tr><td>10–40</td><td>Ամենաբարձր կենտրոնացումը։</td><td>Ամենադժվարը՝ այստեղ․ ցուցադրում և «միասին» փուլ։</td></tr>
+    <tr><td>40–50</td><td>Առաջին անկում։</td><td>Երկու րոպե դադար․ խցիկն անջատած, ջուր, կանգնել։ Հայտարարեք բացահայտ։</td></tr>
+    <tr><td>50–75</td><td>Երկրորդ ալիք՝ ավելի թույլ, քան առաջինը։</td><td>«Ինքը» փուլ՝ ժամաչափով։ Դուք լռում եք։</td></tr>
+    <tr><td>75–90</td><td>Հոգնածություն, ուշադրությունը ցատկում է։</td><td>Միայն ամրապնդում և ելք․ ոչ մի նոր բան։</td></tr>
+  </table>
+
+  <div class="hacks2">
+    <div class="hack e"><h4>Երկու րոպեանոց դադար</h4><p>45-րդ րոպեին՝ միշտ, նույնիսկ եթե «ամեն ինչ լավ է ընթանում»։ Դադարից հետո նրա ուշադրությունը ևս 30 րոպե Ձեր կողմն է։</p></div>
+    <div class="hack e"><h4>Հայացքը՝ խցիկին</h4><p>Հետադարձ կապ տալիս նայեք խցիկին, ոչ թե նրա պատկերին։ Նրա պատուհանը քաշեք խցիկի մոտ, որ դա ինքնաբերաբար ստացվի։</p></div>
+    <div class="hack e"><h4>Երեք վայրկյան հարցից հետո</h4><p>Հարց տվեցիք՝ լռեք երեք վայրկյան։ Առցանց լռությունն ավելի երկար է թվում, քան իրականում է։ Պատասխանը գալիս է երրորդ վայրկյանին։</p></div>
+    <div class="hack e"><h4>Տեխնիկական բառերը՝ դանդաղ և գրված</h4><p>Հայերեն բացատրության մեջ անգլերեն տերմինն ասեք դանդաղ և մեկ անգամ գրեք չաթում։ Ականջով լսված «workflow»-ն և գրված «workflow»-ն սկսնակի համար երկու տարբեր բառ են։</p></div>
+    <div class="hack e"><h4>Երեկոյան՝ հաղթանակից, առավոտյան՝ դժվարից</h4><p>Երեկոյան պարապմունք Պրահայի ժամանակով՝ սկսեք փոքր արդյունքից, տեսությունը՝ նվազագույն։ Առավոտյան՝ հակառակը․ ամենադժվարը՝ առաջին կես ժամում։</p></div>
+    <div class="hack e"><h4>Ազդանշանները կարդալ</h4><p>Երկար լռություն, արագ «հա, հա, հասկացա», ներդիրների փոխում, հայացքն էկրանից դուրս․ սա «չհասկացա» է, ոչ թե «ձանձրալի է»։ Փոխեք ռեժիմը․ տվեք նրան վարելու կամ դադար։</p></div>
+    <div class="hack"><h4>Ձեր սեփական էներգիան</h4><p>Պարապմունքից առաջ 15 րոպե առանց զանգերի և չաթերի։ Երկու պարապմունք անընդմեջ՝ ոչ։ Ջուրը՝ կողքին, ցուցադրման ժամանակ՝ կանգնած, եթե հնարավոր է։ Հոգնած մենթորը խոսում է երկու անգամ ավելի շատ։</p></div>
+    <div class="hack"><h4>Ձայնի երկու արագություն</h4><p>Սովորական խոսքը՝ սովորական տեմպով, բայց հրահանգներն ու թվերը՝ դանդաղ և դադարով։ Նա գրառում է։ Եթե հրահանգը պետք է կրկնել, այն շատ արագ էր ասված։</p></div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section>
+  <div class="sec first">09 · AI-ն՝ Ձեր օգնական</div>
+  <h2>Յոթ պրոմպտ մենթորի համար</h2>
+  <p class="lead">Ինչ սովորեցնում եք, կիրառեք ինքներդ։ Ստորև պրոմպտները պատրաստումն ու հետադարձ կապը դարձնում են րոպեների հարց։ Օգտագործեք ուսումնական հաշվում, առանց նրա իրական տվյալների։ Քառակուսի փակագծերում՝ այն, ինչ փոխարինում եք։</p>
+
+  <div class="pr"><span class="t">Պրոմպտ 1 · Պարապմունքի մեկ էջանոց պլան</span>Դու AI Discover անհատական դասընթացի փորձառու մենթոր ես։ Ուսանողուհին դեսպանության աշխատակից է, սկսնակ AI-ում, աշխատում է հայերեն, չեխերեն և անգլերեն։
+Ահա պարապմունքի նյութն աշխատանքային տետրից՝ [տեղադրել պարապմունքի տեքստը]։
+Կազմիր մեկ էջանոց պլան՝ 1) նպատակը մեկ նախադասությամբ, 2) պատրաստի արդյունքը, որը ցույց կտամ սկզբում, 3) չորս բլոկ րոպեներով՝ ցույց տվեցի / միասին / ինքը / ամրապնդում, 4) AI-ի մեկ հավանական սխալ, որը պետք է ցույց տալ, 5) հանձնարարություն 30–45 րոպեի համար՝ կոնկրետ արդյունքով։
+Ձևաչափ՝ աղյուսակ և կարճ ցանկեր, մինչև 300 բառ, հայերեն։</div>
+
+  <div class="pr"><span class="t">Պրոմպտ 2 · Ուսումնական տվյալներ</span>Ստեղծիր ուսումնական բանկային քաղվածք՝ 50 գործարք, 2026 թ. սեպտեմբեր, հորինված կոնտրագենտներ Պրահայից (գրասենյակային ապրանքներ, կոմունալ վճարներ, տրանսպորտ, ներկայացուցչական ծախսեր), գումարներ CZK-ով և EUR-ով։ Երեք գործարք դարձրու միտումնավոր կասկածելի՝ կրկնություն, սխալ գումար, անհայտ կոնտրագենտ։
+Սյունակներ՝ ամսաթիվ, կոնտրագենտ, նկարագրություն, գումար, արժույթ։
+Տուր CSV ձևաչափով։ Իրական կազմակերպություններ և մարդիկ մի օգտագործիր։</div>
+
+  <div class="pr"><span class="t">Պրոմպտ 3 · Համեմատություն տերմինի համար</span>Բացատրիր «[տերմին]» հասկացությունը դիվանագիտական աշխատանք ունեցող, AI-ում սկսնակ մարդուն։ Տուր երեք կենցաղային համեմատություն՝ յուրաքանչյուրը մեկ նախադասությամբ, հետո՝ մեկ օրինակ դեսպանության աշխատանքից՝ առանց իրական տվյալների։ Հայերեն, պարզ, առանց ժարգոնի։</div>
+
+  <div class="pr"><span class="t">Պրոմպտ 4 · Հարցեր վերհիշման համար</span>Ահա պարապմունքի օրագիրը՝ [տեղադրել]։ Կազմիր հինգ կարճ հարց վերհիշման համար՝ պատասխաններով։ Հարցերը պետք է ստուգեն հասկացումը, ոչ թե հիշողությունը․ «ինչո՞ւ» և «ե՞րբ չի աշխատի» տիպի։ Հայերեն, յուրաքանչյուր հարց՝ մինչև 20 բառ։</div>
+
+  <div class="pr"><span class="t">Պրոմպտ 5 · Հետադարձ կապ երեք տողով</span>Ուսանողուհին ուղարկել է հանձնարարության արդյունքը՝ [նկարագրել, թե ինչ ստացվեց և ինչ ոչ]։ Գրիր հետադարձ կապ երեք տողով՝ 1) ինչն է աշխատել, կոնկրետ, 2) մեկ բան, որ արժե փոխել, և ինչու, 3) ինչ կանենք դրա հետ հաջորդ պարապմունքին։ Տոնը՝ ջերմ, պրոֆեսիոնալ, Դուք-ով։ Հայերեն։</div>
+
+  <div class="pr"><span class="t">Պրոմպտ 6 · «Դետեկտիվ» վարժության պատրաստում</span>Ահա ուսումնական հաշվետվության տեքստը՝ [տեղադրել]։ Ներմուծիր երեք սխալ, որոնք սկսնակը կարող է բաց թողնել՝ մեկ թվային (գումարը չի համընկնում), մեկ փաստական (ամսաթիվ կամ անուն), մեկ տրամաբանական (եզրակացությունը չի բխում տվյալներից)։ Տուր փոփոխված տեքստը և առանձին՝ սխալների ցանկը բացատրությամբ։</div>
+
+  <div class="pr"><span class="t">Պրոմպտ 7 · Հարցերի կանխատեսում</span>Ահա վաղվա պարապմունքի պլանը՝ [տեղադրել]։ Ուսանողուհին զբաղված դիվանագետ է, սկսնակ AI-ում, գնահատում է ժամանակն ու գաղտնիությունը։ Թվարկիր հինգ հարց, որ նա, հավանաբար, կտա, և յուրաքանչյուրի համար՝ կարճ, ազնիվ պատասխան։ Եթե պատասխանը «կախված է»-ն է, ասա, թե ինչից։</div>
+
+  <div class="box"><b>Հնարք պրոմպտների վրա</b>Այս յոթը պահեք Claude Project-ում կամ Custom GPT-ում՝ «Մենթորի օգնական» անունով, ուսանողուհու անոնիմ նկարագրով որպես հրահանգ։ Այդ դեպքում ամեն անգամ գրում եք միայն փակագծերի մասը։</div>
+</section>
+
+<!-- 10 -->
+<section class="np">
+  <div class="sec first">10 · Մեկ էջանոց հուշաթերթ</div>
+  <h2>Տպեք և պահեք մոնիտորի կողքին</h2>
+  <p class="lead">Ամբողջ փաստաթուղթը՝ մեկ էջում։ Ամեն պարապմունքից առաջ մեկ հայացք, ամեն շաբաթ՝ մեկ նոր կետ, որը դեռ չեք փորձել։</p>
+
+  <div class="cheat">
+    <div class="p"><b>Արդյունավետ</b><ul>
+      <li>Արդյունքը՝ առաջին 3 րոպեում</li>
+      <li>Պրոմպտները՝ ֆայլից և չաթով</li>
+      <li>«Քարտեզ» 25 րոպեն մեկ</li>
+      <li>Հարցերի կայանատեղի</li>
+      <li>Ֆայլերը՝ ամսաթվով և թեմայով</li>
+      <li>Ամփոփում՝ նա, ոչ թե Դուք</li>
+      <li>Հաղորդագրություն՝ 2 ժամ առաջ և 10 րոպե հետո</li>
+    </ul></div>
+    <div class="e"><b>Հեշտ</b><ul>
+      <li>«Հինգ մատ»՝ դեր, խնդիր, համատեքստ, ձևաչափ, սահմանափակումներ</li>
+      <li>Մեկ տերմին՝ մեկ համեմատություն</li>
+      <li>«Ոչինչ չի կոտրվի»</li>
+      <li>Հանձնարարության քարտ՝ 5 տող</li>
+      <li>Նոր գործիք՝ ծանոթ խնդրի վրա</li>
+      <li>Պատրաստի ձևակերպումներ՝ կողքին</li>
+    </ul></div>
+    <div class="i"><b>Տպավորիչ</b><ul>
+      <li>Մեկ զարմանքի պահ՝ նախապես փորձված</li>
+      <li>Ժամանակը՝ րոպեով, ավարտը՝ 2 րոպե շուտ</li>
+      <li>Խնայված ժամանակի հաշվիչ</li>
+      <li>Նրա բառերը՝ մեջբերված</li>
+      <li>Նրա հանրային նյութերը՝ օրինակներում</li>
+      <li>Մաքուր էկրան, խոշոր կուրսոր</li>
+    </ul></div>
+    <div class="c"><b>Ստեղծագործ</b><ul>
+      <li>Ձևաչափ՝ ամեն երրորդ պարապմունքին</li>
+      <li>Դետեկտիվ, մրցույթ, հակառակ դեր, սպրինտ</li>
+      <li>«Նախ հարցրու ինձ»</li>
+      <li>«Երեք տարբերակ»</li>
+      <li>Անունով պրոմպտներ</li>
+      <li>Ստեղծագործ ուրբաթ՝ 10 րոպե</li>
+    </ul></div>
+  </div>
+
+  <div class="cheat2">
+    <div><b>Հիշողություն</b>1–3–7 · Երեք հարց առանց էկրանի · Սխալների օրագիր · Հիշողության քարտեր չաթում · Հինն ու նորը՝ խառը · Նախ ինքն է ուղղում</div>
+    <div><b>Էներգիա</b>Դադար 45-րդ րոպեին · Երեք վայրկյան հարցից հետո · Հայացքը՝ խցիկին · Տերմինները՝ դանդաղ և գրված · Երեկոյան՝ հաղթանակից · Ձեր 15 րոպեն՝ առանց զանգերի</div>
+  </div>
+
+  <div class="box"><b>Պարապմունքն ստացվել է, եթե</b>նա երեք բառով ասում է, թե ինչ սովորեց, գրադարանում կա նոր պրոմպտ՝ անունով, գտնվել է AI-ի առնվազն մեկ սխալ, և հանձնարարությունն ունի կոնկրետ արդյունք։ Եթե չորսից մեկը չկա, հաջորդ անգամ սկսեք հենց դրանից։</div>
+
+  <h3>Ամսական ինքնաստուգում՝ երեք հարց մենթորին</h3>
+  <table>
+    <tr><th style="width:40%">Հարց</th><th>Եթե պատասխանը «ոչ» է</th></tr>
+    <tr><td class="b">Այս ամիս փորձե՞լ եմ առնվազն երեք նոր հնարք այս փաստաթղթից։</td><td>Ընտրեք երեքը հուշաթերթից և գրեք հաջորդ ամսվա պլանում։</td></tr>
+    <tr><td class="b">Կա՞ պարապմունք, որտեղ նա խոսել է ինձնից շատ։</td><td>Հաջորդ պարապմունքին կիրառեք «հակառակ դեր» կամ «սպրինտ» ձևաչափը։</td></tr>
+    <tr><td class="b">Կարո՞ղ եմ անվանել ամսվա մեկ զարմանքի պահ, որի մասին նա ինքը պատմեց։</td><td>Ընտրեք 05 բաժնից մեկը, փորձեք նախապես, ցույց տվեք հաջորդ շաբաթ։</td></tr>
+  </table>
+</section>
+
+<!-- 11 -->
+<section class="np">
+  <div class="sec first">11 · Հուշաթերթ ուսանողուհու համար</div>
+  <p class="small">Մենթորին․ այս էջը կարելի է առանձին ուղարկել ուսանողուհուն առաջին պարապմունքից հետո։ Մնացած բաժինները ներքին են։</p>
+
+  <div class="handout">
+    <h2>Ինչպես սովորել այնպես, որ ստացվի</h2>
+    <div class="sub">AI Discover · անհատական դասընթաց · հուշաթերթ ուսանողի համար</div>
+
+    <div class="two">
+      <div>
+        <h4>Պարապմունքից առաջ</h4>
+        <ul>
+          <li>Բացեք գործիքը և ֆայլը, որոնց մասին գրված է հաղորդագրության մեջ։ Առաջին 10 րոպեն աշխատանքի համար է, ոչ թե մուտք գործելու։</li>
+          <li>Գրեք շաբաթվա երկու իրավիճակ, որտեղ մտածեցիք՝ «սա AI-ով կարելի՞ էր»։ Դրանք կդառնան այսօրվա օրինակները։</li>
+          <li>Փակեք աշխատանքային չաթերը։ Այս 90 րոպեն Ձեր ժամանակն է։</li>
+        </ul>
+        <h4>Պարապմունքի ընթացքում</h4>
+        <ul>
+          <li>Վարեք Դուք։ Երբ մկնիկը Ձեր մոտ է, սովորում եք Դուք․ երբ մենթորի մոտ է, նայում եք։</li>
+          <li>Կանգնեցիք՝ ասեք բարձրաձայն․ «Կանգնեցի այստեղ»։ Դա թուլություն չէ, այլ պարապմունքի ամենաօգտակար պահը։</li>
+          <li>Ամեն պրոմպտ, որն աշխատեց, անմիջապես գրանցեք գրադարանում՝ անունով։ Գրադարանը Ձեր ակտիվն է, որը մնում է դասընթացից հետո։</li>
+          <li>Կասկածելի թիվ կամ փաստ տեսաք՝ կանգ առեք և ստուգեք։ AI-ն սխալվում է վստահ ձայնով։</li>
+          <li>Հարցը թեմայից դուրս է՝ գրեք կայանատեղի։ Պատասխանը կլինի վերջում։</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Պարապմունքից հետո</h4>
+        <ul>
+          <li>48 ժամում կիրառեք նորը երկու անգամ՝ իրական, բայց անոնիմացված խնդրի վրա։ Առանց դրա հմտությունը չի մնում։</li>
+          <li>Հանձնարարությունը՝ 30–45 րոպե, ոչ ավելին։ Չստացվեց՝ գրեք, թե որտեղ, և դա արդեն արդյունք է։</li>
+          <li>Ձեր գտած AI-ի ամեն սխալ գրեք սխալների օրագրում։ Երեք ամսից դա Ձեր ամենաարժեքավոր փաստաթուղթն է։</li>
+        </ul>
+        <h4>Ինչպես խոսել AI-ի հետ՝ «հինգ մատ»</h4>
+        <ul>
+          <li><b>Դեր</b> · ով է պատասխանում</li>
+          <li><b>Խնդիր</b> · ինչ պետք է անել</li>
+          <li><b>Համատեքստ</b> · ինչ պետք է իմանալ</li>
+          <li><b>Ձևաչափ</b> · ինչպիսին պետք է լինի արդյունքը</li>
+          <li><b>Սահմանափակումներ</b> · ինչ չանել</li>
+          <li>Պատասխանը թույլ է՝ մատներից մեկը բաց է մնացել։ Ամենից հաճախ՝ համատեքստը։</li>
+        </ul>
+        <h4>Երեք կանոն, որոնք երբեք չեն փոխվում</h4>
+        <ul>
+          <li>Դեսպանության իրական փաստաթղթերը AI չեն մտնում։ Միայն անոնիմացված պատճենները։</li>
+          <li>AI-ի ամեն թիվ և մեջբերում ստուգվում է։</li>
+          <li>Չստացվեց՝ դա նյութ է հաջորդ պարապմունքի համար, ոչ թե պատճառ՝ կանգ առնելու։</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span>Steply · AI Discover</span><span>steply.tech</span></div>
+  </div>
+
+  <div class="foot">
+    <span>Steply · Երևան · steply.tech</span>
+    <span>Ներքին փաստաթուղթ · ուսանողուհուն՝ միայն 11-րդ բաժինը</span>
+  </div>
+</section>
+
+</body>
+</html>
