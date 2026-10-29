@@ -2,7 +2,7 @@
 <html lang="hy">
 <head>
 <meta charset="utf-8">
-<title>AI Discover — Անհատական ուսումնական ծրագիր</title>
+<title>AI Discover — Անհատական ուսումնական ծրագիր · Վերոնիկա Ավթանդիլյան</title>
 <style>
   @page { size: A4; margin: 16mm 16mm 18mm 16mm; }
   :root {
@@ -12,7 +12,7 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body { font-family: "Segoe UI", "Arial", sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.45; }
+  body { font-family: "Noto Sans", "Noto Sans Armenian", "Segoe UI", "Arial", sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.4; }
   h1, h2, h3, h4 { margin: 0; font-weight: 600; color: var(--navy); }
   p { margin: 0 0 6pt 0; }
   ul { margin: 0; padding-left: 14pt; }
@@ -24,7 +24,9 @@
   /* Cover */
   .cover { height: 257mm; display: flex; flex-direction: column; justify-content: space-between; }
   .brand { font-size: 10pt; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-  .cover-main { margin-top: 60mm; }
+  .cover-main { margin-top: 48mm; }
+  .logo { height: 14mm; width: auto; display: block; margin-bottom: 9pt; }
+  .logo-sm { height: 6.5mm; width: auto; vertical-align: middle; margin-right: 6pt; }
   .cover h1 { font-size: 30pt; line-height: 1.15; margin-bottom: 10pt; }
   .cover .sub { font-size: 14pt; color: var(--muted); max-width: 150mm; margin-bottom: 26pt; }
   .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6pt 18pt; max-width: 160mm; }
@@ -79,13 +81,17 @@
   .projects div { background: var(--amber-soft); border-radius: 6pt; padding: 9pt 10pt; font-size: 9.6pt; }
   .projects b { display: block; color: var(--navy); font-size: 10.5pt; margin-bottom: 3pt; }
 
-  .outcomes { columns: 2; column-gap: 16pt; font-size: 10pt; }
+  .outcomes { columns: 2; column-gap: 16pt; font-size: 9.6pt; }
   .outcomes li { break-inside: avoid; margin-bottom: 4pt; }
 
   .note { background: var(--bg-soft); border-radius: 6pt; padding: 8pt 11pt; font-size: 9.5pt; color: var(--muted); margin-top: 8pt; }
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8pt; margin-top: 8pt; }
   .steps div { border: 1px solid var(--line); border-radius: 6pt; padding: 8pt 10pt; font-size: 9.8pt; }
   .steps b { color: var(--accent); display: block; font-size: 12pt; }
+  .fmt td { padding: 4pt 8pt; }
+  .cal td { font-size: 9.6pt; }
+  .cal .pt { display: inline-block; min-width: 16pt; text-align: center; background: var(--navy); color: #fff; font-weight: 700; font-size: 8.5pt; border-radius: 4pt; padding: 1pt 5pt; }
+  .cal tr.brk td { background: var(--amber-soft) !important; color: var(--navy); font-style: italic; }
   .contact { margin-top: 14pt; padding-top: 8pt; border-top: 2px solid var(--navy); font-size: 9.5pt; color: var(--muted); display: flex; justify-content: space-between; }
 </style>
 </head>
@@ -93,21 +99,19 @@
 
 <!-- ===================== COVER ===================== -->
 <section class="page cover">
-  <div class="brand">Steply · AI Discover</div>
+  <div><img class="logo" src="steply-logo.png" alt="Steply"><div class="brand">Steply · AI Discover</div></div>
   <div class="cover-main">
     <h1>Անհատական ուսումնական ծրագիր</h1>
     <div class="sub">AI-ն որպես աշխատանքային գործիք՝ ֆինանսական վերլուծություն, հաշվետվություններ, փաստաթղթեր և մեդիա կոնտենտ</div>
     <div class="meta">
-      <div><div class="k">Ուսանող</div><div class="v">[Անուն Ազգանուն]</div></div>
-      <div><div class="k">Աշխատանքի ոլորտ</div><div class="v">Դիվանագիտական ներկայացուցչություն, Պրահա</div></div>
-      <div><div class="k">Տևողություն</div><div class="v">3 ամիս · 24 պարապմունք</div></div>
+      <div><div class="k">Մասնակից</div><div class="v">Վերոնիկա Ավթանդիլյան</div></div>
+      <div><div class="k">Մեկնարկ</div><div class="v">2026 թ. նոյեմբերի 1</div></div>
+      <div><div class="k">Տևողություն</div><div class="v">3 ամիս · 12 շաբաթ · 23 պարապմունք</div></div>
       <div><div class="k">Ձևաչափ</div><div class="v">Անհատական (1:1) · առցանց · հայերեն</div></div>
-      <div><div class="k">Պատրաստված է</div><div class="v">2026 թ. հոկտեմբերի 26</div></div>
-      <div><div class="k">Տարբերակ</div><div class="v">1.0 · նախնական՝ քննարկման համար</div></div>
     </div>
   </div>
   <div class="cover-foot">
-    <span>Steply — AI ավտոմատացման և ծրագրային մշակման գործակալություն, Երևան</span>
+    <span>Steply</span>
     <span>steply.tech · +374-94-670721</span>
   </div>
 </section>
@@ -116,22 +120,21 @@
 <section class="page">
   <div class="sec">01 · Ծրագրի մասին</div>
   <h2>Ինչու այս ծրագիրը</h2>
-  <p class="lead">Սա AI Discover դասընթացի անհատական տարբերակն է՝ կառուցված Ձեր իրական աշխատանքի շուրջ։ Հիմնական ծրագրի կմախքը պահպանվում է՝ AI-ի հիմքեր, պրոմպտինգ, փաստաթղթեր, ավտոմատացում, սակայն երկրորդ և երրորդ ամիսներն ամբողջությամբ վերակառուցված են երկու ուղղությամբ՝ <b>ֆինանսական աշխատանք</b> և <b>մեդիա կոնտենտ</b>։ Նպատակը ոչ միայն AI-ն հասկանալն է, այլ Ձեր ամենօրյա գործն ավելի արագ ու հեշտ դարձնելը։</p>
+  <p class="lead">Սա AI Discover դասընթացի անհատական տարբերակն է՝ կառուցված Ձեր աշխատանքի շուրջ։ Առաջին ամիսը՝ հիմքեր և պրոմպտինգ, երկրորդը՝ <b>ֆինանսական աշխատանք</b>, երրորդը՝ <b>մեդիա կոնտենտ</b> և ավտոմատացում։</p>
 
   <h3>Չորս նպատակ</h3>
   <div class="cards">
-    <div class="card"><div class="n">Նպատակ 1</div><h4>Վստահ կիրառել AI-ն</h4><p>Հասկանալ, թե ինչպես են աշխատում ChatGPT-ն, Claude-ը, Gemini-ն և Perplexity-ն, որտեղ են վստահելի և որտեղ՝ ոչ։</p></div>
-    <div class="card"><div class="n">Նպատակ 2</div><h4>Արագացնել ֆինանսական աշխատանքը</h4><p>Բանկային քաղվածքներ, ֆինանսական վերլուծություն և հաշվետվություններ՝ ժամերի փոխարեն րոպեներով, ստուգված արդյունքով։</p></div>
-    <div class="card"><div class="n">Նպատակ 3</div><h4>Ստեղծել պրոֆեսիոնալ կոնտենտ</h4><p>Տեքստ, լուսանկար, վիդեո, անիմացիա, ներկայացումներ և սոցցանցային գրառումներ՝ պաշտոնական էջին վայել որակով։</p></div>
-    <div class="card"><div class="n">Նպատակ 4</div><h4>Ավտոմատացնել կրկնվող գործերը</h4><p>Աշխատող հոսք, որը Ձեր փոխարեն կատարում է ամենօրյա ռուտինը՝ առանց կոդի։</p></div>
+    <div class="card"><div class="n">Նպատակ 1</div><h4>Վստահ կիրառել AI-ն</h4><p>Իմանալ, թե որ գործիքը որ խնդրի համար է, որտեղ է վստահելի և որտեղ՝ ոչ։</p></div>
+    <div class="card"><div class="n">Նպատակ 2</div><h4>Արագացնել ֆինանսական աշխատանքը</h4><p>Քաղվածքներ, վերլուծություն և հաշվետվություններ՝ ժամերի փոխարեն րոպեներով։</p></div>
+    <div class="card"><div class="n">Նպատակ 3</div><h4>Ստեղծել պրոֆեսիոնալ կոնտենտ</h4><p>Տեքստ, պատկեր, վիդեո և ներկայացումներ՝ պաշտոնական էջին վայել որակով։</p></div>
+    <div class="card"><div class="n">Նպատակ 4</div><h4>Ավտոմատացնել կրկնվող գործերը</h4><p>Աշխատող հոսք, որը Ձեր փոխարեն կատարում է ռուտինը՝ առանց կոդի։</p></div>
   </div>
 
-  <h3>Չորս սկզբունք</h3>
-  <div class="principle">
-    <div><b>Գաղտնիությունն առաջին հերթին</b>Դիվանագիտական աշխատանքում ոչ մի իրական անձնական կամ ծառայողական տվյալ չի մտնում AI գործիք առանց անոնիմացման։ Սա սովորում ենք 5-րդ պարապմունքին և կիրառում ենք մինչև վերջ։</div>
-    <div><b>Ձեր իրական խնդիրները</b>Յուրաքանչյուր պարապմունք կառուցվում է Ձեր առաջադրանքների, փաստաթղթերի և կոնտենտի վրա՝ անոնիմացված օրինակներով։</div>
-    <div><b>Յուրաքանչյուր պարապմունք՝ աշխատող արդյունք</b>Ձևանմուշ, պրոմպտ, հոսք կամ պատրաստի նյութ, որը կարող եք օգտագործել արդեն հաջորդ օրը։</div>
-    <div><b>Պրոմպտների անձնական գրադարան</b>Առաջին պարապմունքից կառուցում ենք Ձեր գրադարանը, որը դասընթացի վերջում դառնում է Ձեր աշխատանքային ձեռնարկը։</div>
+  <h3>Երեք սկզբունք</h3>
+  <div class="principle" style="grid-template-columns:1fr 1fr 1fr">
+    <div><b>Ձեր իրական խնդիրները</b>Պարապմունքները կառուցվում են Ձեր առաջադրանքների վրա՝ անոնիմացված օրինակներով։</div>
+    <div><b>Յուրաքանչյուր պարապմունք՝ աշխատող արդյունք</b>Ձևանմուշ, պրոմպտ կամ հոսք, որն օգտագործում եք արդեն հաջորդ օրը։</div>
+    <div><b>Պրոմպտների անձնական գրադարան</b>Կառուցվում է առաջին պարապմունքից և ավարտին դառնում է Ձեր աշխատանքային ձեռնարկը։</div>
   </div>
 
 </section>
@@ -143,24 +146,46 @@
     <tr><th style="width:30%">Փուլ</th><th style="width:17%">Պարապմունք</th><th style="width:11%">Շաբաթ</th><th>Ինչ եք ստանում</th></tr>
     <tr><td class="b">A · Հիմքեր և անվտանգ աշխատանք</td><td>1–6</td><td>1–3</td><td>Կարգավորված գործիքներ, պրոմպտինգի մեթոդ, անվտանգության կանոններ, եռալեզու նամակագրության ձևանմուշներ</td></tr>
     <tr><td class="b">B · Ֆինանսներ, փաստաթղթեր, հաշվետվություններ</td><td>7–14</td><td>4–7</td><td>Ամբողջական հոսք՝ քաղվածք → աղյուսակ → վերլուծություն → հաշվետվություն</td></tr>
-    <tr><td class="b">C · Կոնտենտ և մեդիա</td><td>15–21</td><td>8–11</td><td>Կոնտենտ պլան, դիզայնի ձևանմուշներ, ներկայացում, վիդեո, անիմացիա</td></tr>
-    <tr><td class="b">D · Ավտոմատացում և ավարտական նախագիծ</td><td>22–24</td><td>12</td><td>Աշխատող, փաստաթղթավորված ավտոմատացում Ձեր գործի համար</td></tr>
+    <tr><td class="b">C · Կոնտենտ և մեդիա</td><td>15–20</td><td>8–10</td><td>Կոնտենտ պլան, դիզայնի ձևանմուշներ, ներկայացում, վիդեո, անիմացիա</td></tr>
+    <tr><td class="b">D · Ավտոմատացում և ավարտական նախագիծ</td><td>21–23</td><td>11–12</td><td>Աշխատող, փաստաթղթավորված ավտոմատացում Ձեր գործի համար</td></tr>
   </table>
 
   <h3>Երեք ամիսը մեկ հայացքով</h3>
   <div class="cards" style="grid-template-columns:1fr 1fr 1fr">
-    <div class="card"><div class="n">Ամիս 1</div><h4>Հիմքեր, անվտանգություն, փաստաթղթեր</h4><p>Գործիքների կարգավորում, պրոմպտինգի մեթոդ, գաղտնիության կանոններ, եռալեզու նամակագրություն և փաստաթղթերի հետ աշխատանքի սկիզբ։ Ավարտին՝ պրոմպտների առաջին գրադարանը և անվտանգ աշխատանքի անձնական կանոնակարգ։</p></div>
-    <div class="card"><div class="n">Ամիս 2</div><h4>Ֆինանսներ և հաշվետվություններ</h4><p>Բանկային քաղվածքներ, աղյուսակներ, ֆինանսական վերլուծություն և հաշվետվություններ՝ Ձեր իրական, անոնիմացված տվյալների վրա։ Ավարտին՝ ամբողջական հոսք, որն անցել եք ինքնուրույն, և ավարտական նախագծի թեման։</p></div>
-    <div class="card"><div class="n">Ամիս 3</div><h4>Մեդիա կոնտենտ և ավտոմատացում</h4><p>Կոնտենտ պլան, տեքստեր, պատկերներ, դիզայն, ներկայացումներ, վիդեո և անիմացիա, ապա՝ առաջին ավտոմատացումը Make-ով կամ n8n-ով։ Ավարտին՝ աշխատող նախագիծ և վկայական։</p></div>
+    <div class="card"><div class="n">Ամիս 1</div><h4>Հիմքեր, անվտանգություն, փաստաթղթեր</h4><p>Գործիքների կարգավորում, պրոմպտինգ, գաղտնիության կանոններ, եռալեզու նամակագրություն, փաստաթղթեր։ Ավարտին՝ պրոմպտների առաջին գրադարանը։</p></div>
+    <div class="card"><div class="n">Ամիս 2</div><h4>Ֆինանսներ և հաշվետվություններ</h4><p>Բանկային քաղվածքներ, աղյուսակներ, վերլուծություն և հաշվետվություններ՝ անոնիմացված տվյալների վրա։ Ավարտին՝ ամբողջական հոսք և ավարտական նախագծի թեման։</p></div>
+    <div class="card"><div class="n">Ամիս 3</div><h4>Մեդիա կոնտենտ և ավտոմատացում</h4><p>Կոնտենտ պլան, տեքստեր, պատկերներ, ներկայացումներ, վիդեո, ապա՝ առաջին ավտոմատացումը։ Ավարտին՝ աշխատող նախագիծ և վկայական։</p></div>
   </div>
 
   <div class="format-strip">
     <div><div class="big">2 × 90</div><div class="lbl">պարապմունք շաբաթական, րոպե</div></div>
-    <div><div class="big">≈ 36 ժ</div><div class="lbl">կենդանի պարապմունք</div></div>
+    <div><div class="big">≈ 35 ժ</div><div class="lbl">կենդանի պարապմունք</div></div>
     <div><div class="big">1–2 ժ</div><div class="lbl">հանձնարարություն պարապմունքների միջև</div></div>
     <div><div class="big">1:1</div><div class="lbl">մեկ մենթոր՝ սկզբից մինչև վերջ</div></div>
   </div>
-  <div class="note">Մոդուլների հերթականությունն ու խորությունը հարմարեցվում են Ձեր առաջնահերթություններին։ Եթե մեդիա ուղղությունն ավելի հրատապ է, B և C փուլերը փոխում ենք տեղերով։</div>
+</section>
+
+<!-- ===================== CALENDAR ===================== -->
+<section class="page">
+  <div class="sec">01 · Ծրագրի մասին</div>
+  <h2>Օրացույց</h2>
+  <p class="lead">Մեկնարկ՝ <b>2026 թ. նոյեմբերի 1</b>, ավարտ՝ <b>2027 թ. հունվարի 24</b>։ Շաբաթական երկու պարապմունք՝ համաձայնեցված օրերին և ժամին, Պրահայի ժամանակով։</p>
+  <table class="cal">
+    <tr><th style="width:9%">Շաբաթ</th><th style="width:25%">Ամսաթվեր</th><th style="width:8%">Փուլ</th><th style="width:14%">Պարապմունք</th><th>Թեմաներ</th></tr>
+    <tr><td class="b">1</td><td>2–8 նոյեմբերի</td><td><span class="pt">A</span></td><td>1 · 2</td><td>Մեկնարկ և գործիքների կարգավորում · Ո՞ր գործիքը՝ ինչի համար</td></tr>
+    <tr><td class="b">2</td><td>9–15 նոյեմբերի</td><td><span class="pt">A</span></td><td>3 · 4</td><td>Պրոմպտինգ I · Պրոմպտինգ II</td></tr>
+    <tr><td class="b">3</td><td>16–22 նոյեմբերի</td><td><span class="pt">A</span></td><td>5 · 6</td><td>Գաղտնիություն և տվյալների անվտանգություն · Աշխատանք երեք լեզվով</td></tr>
+    <tr><td class="b">4</td><td>23–29 նոյեմբերի</td><td><span class="pt">B</span></td><td>7 · 8</td><td>Փաստաթղթերի հետ աշխատանք · Աղյուսակներ և AI</td></tr>
+    <tr><td class="b">5</td><td>30 նոյեմբերի – 6 դեկտեմբերի</td><td><span class="pt">B</span></td><td>9 · 10</td><td>Բանկային քաղվածքներ I և II</td></tr>
+    <tr><td class="b">6</td><td>7–13 դեկտեմբերի</td><td><span class="pt">B</span></td><td>11 · 12</td><td>Ֆինանսական վերլուծություն I և II</td></tr>
+    <tr><td class="b">7</td><td>14–20 դեկտեմբերի</td><td><span class="pt">B</span></td><td>13 · 14</td><td>Հաշվետվություններ · Մինի նախագիծ՝ քաղվածքից մինչև հաշվետվություն</td></tr>
+    <tr><td class="b">8</td><td>21–27 դեկտեմբերի</td><td><span class="pt">C</span></td><td>15 · 16</td><td>Կոնտենտ ռազմավարություն · Տեքստային կոնտենտ երեք լեզվով</td></tr>
+    <tr><td class="b">9</td><td>28 դեկտեմբերի – 3 հունվարի</td><td><span class="pt">C</span></td><td>17 · 18</td><td>Պատկերներ I՝ գեներացիա և ֆոտոխմբագրում · Պատկերներ II՝ դիզայն Canva-ով</td></tr>
+    <tr><td class="b">10</td><td>4–10 հունվարի</td><td><span class="pt">C</span></td><td>19 · 20</td><td>Ներկայացումներ · Վիդեո և անիմացիա</td></tr>
+    <tr><td class="b">11</td><td>11–17 հունվարի</td><td><span class="pt">D</span></td><td>21 · 22</td><td>Make / n8n · Ավարտական նախագծի կառուցում</td></tr>
+    <tr><td class="b">12</td><td>18–24 հունվարի</td><td><span class="pt">D</span></td><td>23 · պահուստ</td><td>Թեստավորում, փաստաթղթավորում, ամփոփում և վկայական · պահուստային օր տեղափոխված պարապմունքի համար</td></tr>
+  </table>
+
 </section>
 
 <!-- ===================== BLOCK A ===================== -->
@@ -224,7 +249,7 @@
 
 <!-- ===================== BLOCK C ===================== -->
 <section class="page">
-  <div class="block"><span class="tag">C</span><h3>Կոնտենտ և մեդիա</h3><span class="rng">Պարապմունք 15–21 · շաբաթ 8–11</span></div>
+  <div class="block"><span class="tag">C</span><h3>Կոնտենտ և մեդիա</h3><span class="rng">Պարապմունք 15–20 · շաբաթ 8–10</span></div>
   <div class="sessions">
     <div class="s"><span class="num">15</span><h4>Կոնտենտ ռազմավարություն պաշտոնական էջի համար</h4>
       <ul><li>Լսարան, տոն, ձևաչափեր՝ ինչն է հարմար դիվանագիտական ներկայացուցչության էջին</li><li>Կոնտենտ օրացույց AI-ով՝ իրադարձություններ, տոներ, հայտարարություններ</li><li>Facebook, Instagram, LinkedIn՝ յուրաքանչյուր հարթակի տրամաբանությունը</li></ul>
@@ -241,11 +266,8 @@
     <div class="s"><span class="num">19</span><h4>Ներկայացումներ</h4>
       <ul><li>Gamma, Canva, PowerPoint և AI՝ հակիրճ նկարագրությունից մինչև պատրաստի սլայդներ</li><li>Կառուցվածք, վիզուալներ, խոսողի նոթեր</li><li>Ֆինանսական տվյալների ներկայացում՝ գծապատկերներ, որոնք հասկանալի են առանց բացատրության</li></ul>
       <div class="res"><b>Արդյունք՝</b> ներկայացման ձևանմուշ և մեկ պատրաստի ներկայացում</div></div>
-    <div class="s"><span class="num">20</span><h4>Վիդեո I՝ մոնտաժ</h4>
-      <ul><li>CapCut՝ միջոցառման ամփոփ վիդեո, կտրում, անցումներ, երաժշտություն</li><li>Ավտոմատ ենթագրեր և դրանց թարգմանություն</li><li>Ձայնային ուղեկցում AI-ով (ElevenLabs)</li></ul>
-      <div class="res"><b>Արդյունք՝</b> պատրաստի կարճ վիդեո սոցցանցերի համար</div></div>
-    <div class="s"><span class="num">21</span><h4>Վիդեո II և անիմացիա</h4>
-      <ul><li>Գեներատիվ վիդեո՝ Veo, Runway, Kling՝ հնարավորություններ և սահմաններ</li><li>Անիմացված գրաֆիկա և հայտարարություններ՝ Canva, CapCut</li><li>AI ավատարներ և ձայն (HeyGen), էթիկան և նշումը պաշտոնական կոնտենտում</li></ul>
+    <div class="s"><span class="num">20</span><h4>Վիդեո և անիմացիա</h4>
+      <ul><li>CapCut՝ միջոցառման ամփոփ վիդեո, ենթագրեր և դրանց թարգմանություն</li><li>Գեներատիվ վիդեո՝ Veo, Runway, Kling՝ հնարավորություններ և սահմաններ</li><li>Անիմացված գրաֆիկա և հայտարարություններ՝ Canva, CapCut</li><li>AI ավատարներ և ձայն (HeyGen), էթիկան և նշումը պաշտոնական կոնտենտում</li></ul>
       <div class="res"><b>Արդյունք՝</b> անիմացված հայտարարություն և վիդեո ինտրո</div></div>
   </div>
 
@@ -253,21 +275,21 @@
 
 <!-- ===================== BLOCK D ===================== -->
 <section class="page">
-  <div class="block"><span class="tag">D</span><h3>Ավտոմատացում և ավարտական նախագիծ</h3><span class="rng">Պարապմունք 22–24 · շաբաթ 12</span></div>
-  <div class="sessions">
-    <div class="s"><span class="num">22</span><h4>Make / n8n՝ առաջին քայլերը</h4>
+  <div class="block"><span class="tag">D</span><h3>Ավտոմատացում և ավարտական նախագիծ</h3><span class="rng">Պարապմունք 21–23 · շաբաթ 11–12</span></div>
+  <div class="sessions" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="s"><span class="num">21</span><h4>Make / n8n՝ առաջին քայլերը</h4>
       <ul><li>Ինչպես է աշխատում ավտոմատացումը՝ տրիգեր, քայլեր, AI-ի միացում</li><li>Միացում փոստին, Google Sheets-ին, Telegram-ին</li><li>Ավարտական նախագծի կմախքի կառուցում</li></ul>
       <div class="res"><b>Արդյունք՝</b> առաջին աշխատող սցենարը</div></div>
-    <div class="s"><span class="num">23</span><h4>Ավարտական նախագծի կառուցում</h4>
+    <div class="s"><span class="num">22</span><h4>Ավարտական նախագծի կառուցում</h4>
       <ul><li>Ամբողջական հոսքի հավաքում մենթորի հետ</li><li>Սխալների մշակում, ստուգումներ, անվտանգություն</li><li>Փորձարկում իրական, անոնիմացված տվյալներով</li></ul>
       <div class="res"><b>Արդյունք՝</b> աշխատող ավտոմատացում</div></div>
-    <div class="s"><span class="num">24</span><h4>Թեստավորում, փաստաթղթավորում, ամփոփում</h4>
+    <div class="s"><span class="num">23</span><h4>Թեստավորում, փաստաթղթավորում, ամփոփում</h4>
       <ul><li>Վերջնական թեստավորում և գործարկում</li><li>Հոսքի փաստաթղթավորում, որ աշխատի նաև դասընթացից հետո</li><li>Պրոմպտների գրադարանի վերջնական տարբերակ, հաջորդ 90 օրվա պլան, վկայական</li></ul>
       <div class="res"><b>Արդյունք՝</b> փաստաթղթավորված հոսք, գրադարան և անհատական զարգացման պլան</div></div>
   </div>
 
 <!-- ===================== PROJECT · TOOLS ===================== -->
-  <div class="sec" style="margin-top:14pt">03 · Ավարտական նախագիծ</div>
+  <div class="sec" style="margin-top:10pt">03 · Ավարտական նախագիծ</div>
   <h2>Ինչով եք ավարտում</h2>
   <p class="lead">Նախագիծն ընտրվում է 14-րդ պարապմունքին՝ ելնելով Ձեր իրական կարիքից։ Երեք հավանական ուղղություն՝</p>
   <div class="projects">
@@ -302,44 +324,14 @@
     <tr><td class="b">Փաստաթղթեր</td><td>Google Docs, Word, NotebookLM</td></tr>
     <tr><td class="b">Պատկերներ և դիզայն</td><td>ChatGPT, Gemini, Midjourney, Canva Magic Studio</td></tr>
     <tr><td class="b">Ներկայացումներ</td><td>Gamma, Canva, PowerPoint</td></tr>
-    <tr><td class="b">Վիդեո և անիմացիա</td><td>CapCut, Veo, Runway, Kling, HeyGen, ElevenLabs</td></tr>
+    <tr><td class="b">Վիդեո և անիմացիա</td><td>CapCut, Veo, Runway, Kling, HeyGen</td></tr>
     <tr><td class="b">Ավտոմատացում և գիտելիքի բազա</td><td>Make / n8n, Notion</td></tr>
   </table>
-  <div class="note">Առաջին երկու ամիսներին գործիքների անվճար պլանները բավարար են։ Մեդիա փուլում (Canva, CapCut, Midjourney, ElevenLabs) որոշ գործառույթներ վճարովի են․ մենթորը նախապես կասի՝ որոնք են իրոք պետք և որքան արժեն։ Հաշիվները բացում և կարգավորում ենք միասին՝ առաջին պարապմունքին։</div>
+  <div class="note">Առաջին երկու ամիսներին անվճար պլանները բավարար են։ Մեդիա փուլի վճարովի գործառույթների մասին մենթորը նախապես կասի։ Հաշիվները բացում ենք միասին՝ առաջին պարապմունքին։</div>
 
 
-  <h3>Ինչպես է անցնում ուսուցումը</h3>
-  <table>
-    <tr><td class="b" style="width:30%">Ձևաչափ</td><td>Անհատական (1:1), առցանց՝ Google Meet կամ Zoom, էկրանի ցուցադրմամբ։ Լեզուն՝ հայերեն, գործիքների ինտերֆեյսներն՝ անգլերեն։</td></tr>
-    <tr><td class="b">Գրաֆիկ</td><td>Շաբաթական 2 պարապմունք՝ 90 րոպե յուրաքանչյուրը։ Օրերն ու ժամերը համաձայնեցվում են Ձեզ հետ՝ Պրահայի ժամանակով (Երևանի հետ տարբերությունը՝ 3 ժամ ձմռանը, 2 ժամ ամռանը)։</td></tr>
-    <tr><td class="b">Մեկնարկ</td><td>Ցանկացած օր՝ ծանոթացման զանգից և գրաֆիկի համաձայնեցումից հետո։</td></tr>
-    <tr><td class="b">Պարապմունքների միջև</td><td>1–2 ժամ գործնական հանձնարարություն Ձեր աշխատանքի նյութերի վրա, որը մենթորը վերանայում է։ Հարցերի պատասխաններ՝ ընդհանուր չաթում։</td></tr>
-    <tr><td class="b">Մենթոր</td><td>Մեկ մենթոր՝ առաջին պարապմունքից մինչև ավարտական նախագիծ։ Ինժեներ, որն ամեն շաբաթ Steply-ի հաճախորդների համար կառուցում է ավտոմատացում և AI համակարգեր։</td></tr>
-    <tr><td class="b">Ձայնագրություններ և բաց թողնված պարապմունք</td><td>Բոլոր պարապմունքները ձայնագրվում են և հասանելի են դասընթացի ողջ ընթացքում։ Պարապմունքը տեղափոխվում է, եթե նախազգուշացնեք առնվազն մեկ օր առաջ։</td></tr>
-    <tr><td class="b">Ինչ է պետք</td><td>Նոութբուք կամ համակարգիչ (Windows, macOS կամ Linux), կայուն ինտերնետ, խցիկ և խոսափող։</td></tr>
-  </table>
-
-</section>
-
-<!-- ===================== PRICE · NEXT STEPS ===================== -->
-<section class="page">
-  <div class="sec">05 · Արժեք և հաջորդ քայլերը</div>
-  <h2>Արժեք</h2>
-  <table>
-    <tr><th style="width:22%">Ձևաչափ</th><th style="width:15%">Ամսական</th><th style="width:19%">Ընդամենը՝ 3 ամիս</th><th>Վճարում</th></tr>
-    <tr><td class="b">Անհատական (1:1)</td><td><b>75 000 ֏</b></td><td><b>225 000 ֏</b></td><td>Ամսական՝ յուրաքանչյուր ամսվա սկզբում։ Վճարման տվյալները ստանում եք ծանոթացման զանգից հետո։</td></tr>
-  </table>
-  <div class="note">Ծրագիրը և պայմանները նախնական են և վերջնականացվում են ծանոթացման զանգի ժամանակ՝ Ձեր նպատակների և գրաֆիկի ճշտումից հետո։ Հայտն ուղարկելը և զանգը ոչ մի պարտավորություն չեն ստեղծում։</div>
-
-  <h3>Հաջորդ քայլերը</h3>
-  <div class="steps">
-    <div><b>1</b>Ծանոթացման զանգ՝ մոտ 20 րոպե։ Ճշտում ենք Ձեր նպատակները, մակարդակը և առաջնահերթությունները։</div>
-    <div><b>2</b>Ծրագրի վերջնականացում և գրաֆիկի համաձայնեցում՝ օրեր, ժամեր, մեկնարկի ամսաթիվ։</div>
-    <div><b>3</b>Մեկնարկ։ Առաջին պարապմունքին միասին բացում և կարգավորում ենք բոլոր գործիքները։</div>
-  </div>
-
-  <div class="contact">
-    <span>Steply · Երևան, Հայաստան · steply.tech</span>
+  <div class="contact" style="align-items:center;margin-top:24pt">
+    <span><img class="logo-sm" src="steply-logo.png" alt="Steply">Երևան, Հայաստան · steply.tech</span>
     <span>WhatsApp / Telegram՝ +374-94-670721 · steplydev@gmail.com</span>
   </div>
 </section>
