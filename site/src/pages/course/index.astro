@@ -1,0 +1,195 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import SessionCard from '../../components/SessionCard.astro';
+import { course, phases, allTools, stats, stripMentor, url } from '../../lib/data.js';
+
+const stripRange = (lead) => lead.replace(/^Պարապմունք[^։]*։\s*/, '');
+const extra = (html) => {
+  if (!html) return null;
+  const m = html.match(/<h3[^>]*>([\s\S]*?)<\/h3>/);
+  return { title: m ? m[1].replace(/<[^>]+>/g, '') : 'Լրացուցիչ նյութեր', html: m ? html.replace(m[0], '') : html };
+};
+---
+<Base title="Դասընթաց" description={course.cover.sub}>
+  <div class="container">
+    <header class="page-head course-head">
+      <div>
+        <span class="kicker">Դասընթաց · {stats.sessions} պարապմունք · {stats.weeks} շաբաթ</span>
+        <h1>{course.cover.title}</h1>
+        <p class="lead">{course.cover.sub}</p>
+      </div>
+      <aside class="card pad progress-card" aria-label="Առաջընթաց">
+        <div class="pc-top">
+          <b class="serif tnum"><span data-progress-count>0</span> / {stats.sessions}</b>
+          <span>պարապմունք ավարտված</span>
+        </div>
+        <div class="progress"><span data-progress-bar></span></div>
+        <a class="btn btn-primary" href={url('/course/1/')} data-continue={url('/course/')}>
+          <span data-continue-label>Սկսել պարապմունք 1-ից</span><Icon name="arrow-right" />
+        </a>
+      </aside>
+    </header>
+
+    <details class="intro card">
+      <summary>
+        <span class="intro-icon"><Icon name="book" /></span>
+        <span class="intro-t"><b>Ինչպես օգտվել այս նյութերից</b><small>{course.intro.toc.map((t) => t.title).join(' · ')}</small></span>
+        <Icon name="chevron-down" class="chev" />
+      </summary>
+      <div class="doc intro-body" set:html={stripMentor(course.intro.html)} />
+    </details>
+
+    <div class="filters" data-filters>
+      <label class="search">
+        <Icon name="search" />
+        <input type="search" placeholder="Որոնել պարապմունքներում…" data-q aria-label="Որոնում" />
+      </label>
+      <div class="seg" role="group" aria-label="Փուլ">
+        <button type="button" data-ph="" aria-pressed="true">Բոլորը</button>
+        {phases.map((p) => (
+          <button type="button" data-ph={p.letter} data-phase={p.letter} aria-pressed="false" title={p.title}>
+            <i class="dot"></i>{p.letter}<span class="ph-name"> · {p.short}</span>
+          </button>
+        ))}
+      </div>
+      <select class="select" data-tool aria-label="Գործիք">
+        <option value="">Բոլոր գործիքները</option>
+        {allTools.map((t) => <option value={t.name}>{t.name} · {t.sessions.length}</option>)}
+      </select>
+      <span class="result-count tnum" data-count></span>
+    </div>
+
+    {phases.map((p) => {
+      const x = extra(p.extra);
+      return (
+        <section class="phase-sec" id={`phase-${p.key}`} data-phase={p.letter} data-phase-sec={p.letter}>
+          <div class="phase-head">
+            <span class="ph-badge lg">{p.letter}</span>
+            <div class="phase-copy">
+              <span class="kicker ph-k tnum">Փուլ {p.letter} · պարապմունք {p.sessionRange} · շաբաթ {p.weekRange}</span>
+              <h2>{p.title}</h2>
+              <p>{stripRange(p.lead)}</p>
+            </div>
+          </div>
+          {(p.boxes.length > 0 || x) && (
+            <div class="phase-notes">
+              {p.boxes.map((b) => (<div class:list={['callout', b.kind]}><b>{b.title}</b>{b.text}</div>))}
+              {x && (
+                <details class="phase-extra">
+                  <summary><Icon name="grid" />{x.title}</summary>
+                  <div class="doc" set:html={x.html} />
+                </details>
+              )}
+            </div>
+          )}
+          <div class="grid-3 sessions-grid">
+            {p.sessions.map((s) => <SessionCard s={s} />)}
+          </div>
+        </section>
+      );
+    })}
+    <p class="empty" data-empty>Ոչինչ չի գտնվել։ Փորձեք այլ բառ կամ մաքրեք ֆիլտրերը։</p>
+
+    <a class="ref-card card" href={url('/course/reference/')}>
+      <span class="ref-icon"><Icon name="sparkles" /></span>
+      <span>
+        <b>{course.final.title}</b>
+        <small>Ավարտական նախագիծ, պրոմպտի ձևանմուշ, բառարան, ստուգաթերթ և առաջընթացի աղյուսակ</small>
+      </span>
+      <Icon name="arrow-right" class="arrow" />
+    </a>
+  </div>
+</Base>
+
+<script>
+  const bar = document.querySelector('[data-filters]');
+  const q = bar.querySelector('[data-q]');
+  const tool = bar.querySelector('[data-tool]');
+  const phaseBtns = [...bar.querySelectorAll('[data-ph]')];
+  const cards = [...document.querySelectorAll('.scard')];
+  const sections = [...document.querySelectorAll('[data-phase-sec]')];
+  const count = bar.querySelector('[data-count]');
+  const empty = document.querySelector('[data-empty]');
+  let phase = '';
+
+  function apply() {
+    const term = q.value.trim().toLowerCase();
+    const t = tool.value;
+    let shown = 0;
+    for (const c of cards) {
+      const ok = (!phase || c.dataset.filterPhase === phase)
+        && (!t || c.dataset.filterTools.includes(`|${t}|`))
+        && (!term || c.dataset.filterText.includes(term));
+      c.hidden = !ok;
+      if (ok) shown++;
+    }
+    const filtering = Boolean(phase || t || term);
+    for (const s of sections) {
+      s.hidden = ![...s.querySelectorAll('.scard')].some((c) => !c.hidden);
+      s.classList.toggle('compact', filtering);
+    }
+    count.textContent = filtering ? `${shown} պարապմունք` : '';
+    empty.dataset.show = String(shown === 0);
+  }
+  phaseBtns.forEach((b) => b.addEventListener('click', () => {
+    phase = b.dataset.ph;
+    phaseBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    apply();
+  }));
+  q.addEventListener('input', apply);
+  tool.addEventListener('change', apply);
+  const hash = location.hash.match(/^#phase-([a-d])$/);
+  if (hash) document.getElementById(`phase-${hash[1]}`)?.scrollIntoView();
+</script>
+
+<style>
+  .course-head { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; align-items: end; padding-bottom: 32px; }
+  .progress-card { display: grid; gap: 14px; }
+  .pc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .pc-top b { font-size: 30px; font-weight: 600; color: var(--ink); line-height: 1; }
+  .pc-top > span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 900px) { .course-head { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
+
+  .intro { margin-bottom: 8px; overflow: hidden; }
+  .intro summary { display: flex; align-items: center; gap: 14px; padding: 18px 22px; cursor: pointer; list-style: none; }
+  .intro summary::-webkit-details-marker { display: none; }
+  .intro-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink); flex: none; }
+  .intro-icon :global(svg) { width: 20px; height: 20px; }
+  .intro-t { display: grid; min-width: 0; }
+  .intro-t b { color: var(--ink); font-size: 16.5px; }
+  .intro-t small { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .intro :global(.chev) { margin-left: auto; width: 20px; height: 20px; color: var(--muted); transition: transform 0.2s; flex: none; }
+  .intro[open] :global(.chev) { transform: rotate(180deg); }
+  .intro-body { padding: 4px 22px 22px; border-top: 1px solid var(--line); }
+  .intro-body :global(h3:first-child) { margin-top: 20px; }
+
+  .filters { margin-top: 24px; }
+  .seg .dot { width: 9px; height: 9px; }
+  @media (max-width: 760px) { .ph-name { display: none; } }
+
+  .phase-sec { padding-top: 56px; }
+  .phase-sec.compact { padding-top: 28px; }
+  .phase-sec.compact .phase-copy p, .phase-sec.compact .phase-notes { display: none; }
+  .phase-head { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 18px; }
+  .ph-k { color: var(--ph); }
+  .phase-head h2 { font-family: var(--font-serif); font-size: clamp(24px, 3vw, 32px); font-weight: 600; margin: 6px 0 10px; }
+  .phase-head p { color: var(--text-2); max-width: 820px; margin: 0; }
+  .phase-notes { display: grid; gap: 10px; margin: 0 0 20px 68px; max-width: 900px; }
+  .phase-extra summary { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--accent-ink); font-size: 14.5px; }
+  .phase-extra summary :global(svg) { width: 16px; height: 16px; }
+  .phase-extra .doc { margin-top: 10px; font-size: 15px; }
+  @media (max-width: 640px) {
+    .phase-head { gap: 14px; }
+    .phase-head .ph-badge { width: 40px; height: 40px; font-size: 18px; }
+    .phase-notes { margin-left: 0; }
+  }
+
+  .ref-card { margin-top: 56px; display: flex; align-items: center; gap: 18px; padding: 22px 24px; text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+  .ref-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .ref-icon { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--ph-b-soft); color: var(--ph-b); flex: none; }
+  .ref-icon :global(svg) { width: 24px; height: 24px; }
+  .ref-card b { display: block; font-size: 18px; color: var(--ink); font-family: var(--font-serif); font-weight: 600; }
+  .ref-card small { color: var(--muted); font-size: 14px; }
+  .ref-card :global(.arrow) { margin-left: auto; width: 22px; height: 22px; color: var(--muted); flex: none; }
+</style>

@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import DocArticle from '../../components/DocArticle.astro';
+import { course, docs, stripMentor, url } from '../../lib/data.js';
+
+const { final, appendix } = course;
+const toc = [
+  { id: 'final', title: final.title, kicker: 'Ավարտական նախագիծ' },
+  ...final.toc.map((t) => ({ ...t, sub: true })),
+  { id: 'appendix', title: appendix.title, kicker: 'Հավելվածներ' },
+  ...appendix.toc.map((t) => ({ ...t, sub: true })),
+];
+const html = stripMentor(
+  `<h2 id="final">${final.title}</h2>${final.html}<p class="sec">Հավելվածներ</p><h2 id="appendix">${appendix.title}</h2>${appendix.html}`,
+);
+---
+<Base title={final.title}>
+  <DocArticle
+    kicker="Դասընթաց · ավարտական նախագիծ և հավելվածներ"
+    title={final.title}
+    sub="Ավարտական նախագծի երեք ուղղությունը, պրոմպտի ձևանմուշը, գրադարանի կառուցվածքը, ստուգաթերթ, բառարան և առաջընթացի աղյուսակ։"
+    toc={toc}
+    html={html}
+    pdf={docs.find((d) => d.slug === 'course')}
+  >
+    <a slot="actions" class="btn btn-ghost btn-sm" href={url('/course/')}>← Բոլոր պարապմունքները</a>
+  </DocArticle>
+</Base>

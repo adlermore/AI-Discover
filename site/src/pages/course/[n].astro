@@ -1,0 +1,201 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import FlowBar from '../../components/FlowBar.astro';
+import { sessions, phaseOf, isStudent, stripMentor, url } from '../../lib/data.js';
+
+export function getStaticPaths() {
+  return sessions.map((s) => ({ params: { n: String(s.n) } }));
+}
+
+const s = sessions.find((x) => String(x.n) === Astro.params.n);
+const p = phaseOf(s.phase);
+const prev = sessions.find((x) => x.n === s.n - 1);
+const next = sessions.find((x) => x.n === s.n + 1);
+const tools = s.allTools ? ['ամբողջ փաթեթը'] : s.tools;
+const hasMentor = !isStudent && s.mentor.length > 0;
+const toc = [
+  { id: 'goal', title: 'Նպատակ և արդյունք' },
+  { id: 'flow', title: 'Ընթացք' },
+  ...s.toc,
+  ...(hasMentor ? [{ id: 'mentor', title: 'Մենթորին', mentor: true }] : []),
+];
+---
+<Base title={`${s.n}. ${s.title}`} description={s.goal}>
+  <div class="container" data-phase={s.phase}>
+    <nav class="crumbs s-crumbs" aria-label="Ուղի">
+      <a href={url('/course/')}>Դասընթաց</a><Icon name="chevron-right" />
+      <a href={url(`/course/#phase-${p.key}`)}>Փուլ {p.letter} · {p.short}</a><Icon name="chevron-right" />
+      <span>Պարապմունք {s.n}</span>
+    </nav>
+
+    <header class="s-head">
+      <div class="s-num serif tnum" aria-hidden="true">{s.n}</div>
+      <div class="s-title">
+        <span class="kicker s-k">Պարապմունք {s.n} · Փուլ {s.phase} · շաբաթ {s.week}</span>
+        <h1>{s.title}</h1>
+        <div class="chips s-meta">
+          <span class="chip"><Icon name="clock" />{s.duration} րոպե</span>
+          {s.prompts.length > 0 && <span class="chip prompt-chip"><Icon name="terminal" />{s.prompts.length} պրոմպտ</span>}
+          {tools.map((t) => <span class="chip">{t}</span>)}
+        </div>
+      </div>
+      <button class="done-btn" type="button" data-done-toggle={s.n} aria-pressed="false">
+        <span class="box"><Icon name="check" /></span><span data-label>Նշել որպես ավարտված</span>
+      </button>
+    </header>
+
+    <div class="with-toc s-body">
+      <article class="s-main">
+        <section id="goal" class="goal-grid">
+          <div class="card pad">
+            <span class="kicker">Նպատակ</span>
+            <p class="goal-text">{s.goal}</p>
+            {s.result && <p class="goal-result"><b>Արդյունք՝</b> {s.result}</p>}
+          </div>
+          <div class="card pad">
+            <span class="kicker">Ավարտին կկարողանաք</span>
+            <ul class="can">
+              {s.outcomes.map((o) => <li><span class="ok"><Icon name="check" /></span><span>{o}</span></li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section id="flow" class="s-sec">
+          <h2 class="s-h2">Ընթացք</h2>
+          <FlowBar segments={s.timing} phase={s.phase} />
+        </section>
+
+        <div class="doc s-doc" set:html={stripMentor(s.html)} />
+
+        {hasMentor && (
+          <section id="mentor" class="mentor-only s-sec">
+            <div class="mentor-note">
+              <span class="mn-k"><Icon name="mentor" />Մենթորին</span>
+              <div class="doc" set:html={s.mentor.join('')} />
+            </div>
+          </section>
+        )}
+
+        <nav class="pager" aria-label="Պարապմունքներ">
+          {prev ? (
+            <a class="pg prev" href={prev.href} data-phase={prev.phase}>
+              <small><Icon name="arrow-left" />Նախորդ պարապմունք</small>
+              <span><b class="tnum">{prev.n}.</b> {prev.title}</span>
+            </a>
+          ) : <span></span>}
+          {next ? (
+            <a class="pg next" href={next.href} data-phase={next.phase}>
+              <small>Հաջորդ պարապմունք<Icon name="arrow-right" /></small>
+              <span><b class="tnum">{next.n}.</b> {next.title}</span>
+            </a>
+          ) : (
+            <a class="pg next" href={url('/course/reference/')}>
+              <small>Հաջորդը<Icon name="arrow-right" /></small>
+              <span>Ավարտական նախագիծ և հավելվածներ</span>
+            </a>
+          )}
+        </nav>
+      </article>
+
+      <aside class="toc">
+        <h4>Այս էջում</h4>
+        <ol>
+          {toc.map((t) => <li class:list={[t.mentor && 'mentor-only']}><a href={`#${t.id}`}>{t.title}</a></li>)}
+        </ol>
+        <h4 class="toc-phase">Փուլ {p.letter} · {p.short}</h4>
+        <ol class="phase-list">
+          {p.sessions.map((x) => (
+            <li>
+              <a href={x.href} data-session={x.n} aria-current={x.n === s.n ? 'page' : undefined}>
+                <span class="pn tnum">{x.n}</span><span class="pt">{x.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .s-crumbs { padding-top: 32px; }
+  .s-head {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 28px; align-items: center;
+    padding: 28px 0 36px; margin-bottom: 36px; border-bottom: 1px solid var(--line);
+  }
+  .s-num {
+    width: 112px; height: 112px; border-radius: 30px; display: grid; place-items: center;
+    font-size: 58px; font-weight: 600; color: #fff; background: var(--ph);
+    box-shadow: 0 20px 40px -18px var(--ph), inset 0 0 0 1px rgb(255 255 255 / 0.15);
+  }
+  .s-k { color: var(--ph); }
+  .s-title h1 { font-family: var(--font-serif); font-weight: 600; font-size: clamp(28px, 3.8vw, 42px); letter-spacing: -0.01em; margin: 8px 0 14px; }
+  .s-meta :global(svg) { width: 14px; height: 14px; }
+  .prompt-chip { background: var(--prompt-bg); color: var(--prompt-ink); box-shadow: inset 0 0 0 1px var(--prompt-line); }
+  .done-btn {
+    display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 16px 0 10px; border-radius: 14px;
+    border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-weight: 600; font-size: 14.5px; color: var(--ink);
+    transition: background 0.15s, border-color 0.15s; white-space: nowrap;
+  }
+  .done-btn .box { width: 26px; height: 26px; border-radius: 8px; border: 1.5px dashed var(--line-strong); display: grid; place-items: center; color: transparent; }
+  .done-btn .box :global(svg) { width: 16px; height: 16px; }
+  .done-btn:hover { border-color: var(--good); }
+  .done-btn[aria-pressed='true'] { background: var(--good-soft); border-color: color-mix(in srgb, var(--good) 40%, transparent); color: var(--good); }
+  .done-btn[aria-pressed='true'] .box { background: var(--good); border: 0; color: #fff; }
+  @media (max-width: 860px) {
+    .s-head { grid-template-columns: auto minmax(0, 1fr); gap: 18px; }
+    .s-num { width: 72px; height: 72px; border-radius: 20px; font-size: 36px; align-self: start; }
+    .done-btn { grid-column: 1 / -1; justify-self: start; }
+  }
+
+  .s-main { min-width: 0; max-width: 840px; }
+  .goal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 760px) { .goal-grid { grid-template-columns: minmax(0, 1fr); } }
+  .goal-text { margin: 10px 0 0; font-size: 16px; }
+  .goal-result { margin: 14px 0 0; padding-top: 12px; border-top: 1px dashed var(--line-strong); font-size: 15px; color: var(--text-2); }
+  .goal-result b { color: var(--prompt-ink); }
+  .can { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+  .can li { display: flex; gap: 10px; font-size: 15px; line-height: 1.5; }
+  .ok { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--ph-soft); color: var(--ph); margin-top: 1px; }
+  .ok :global(svg) { width: 13px; height: 13px; }
+
+  .s-sec { margin-top: 56px; }
+  .s-h2, .s-doc :global(h3) {
+    font-family: var(--font-serif); font-weight: 600; font-size: 26px; color: var(--ink);
+    margin: 56px 0 18px; padding-top: 22px; border-top: 1px solid var(--line);
+  }
+  .s-h2 { margin-top: 0; }
+  .s-doc :global(.end) { margin-top: 48px; scroll-margin-top: calc(var(--header-h) + 24px); }
+
+  .mentor-note { padding: 20px 22px; }
+  .mn-k { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--mentor); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .mn-k :global(svg) { width: 18px; height: 18px; }
+  .mentor-note .doc { font-size: 15.5px; }
+
+  .pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 64px; }
+  .pg {
+    display: grid; gap: 6px; padding: 18px 20px; border-radius: var(--radius); border: 1px solid var(--line);
+    background: var(--surface); text-decoration: none; color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .pg:hover { border-color: var(--ph, var(--accent)); box-shadow: var(--shadow-sm); }
+  .pg small { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+  .pg small :global(svg) { width: 15px; height: 15px; }
+  .pg span { font-weight: 600; line-height: 1.4; }
+  .pg b { color: var(--ph, var(--accent)); }
+  .pg.next { text-align: right; }
+  .pg.next small { justify-content: flex-end; }
+  @media (max-width: 640px) { .pager { grid-template-columns: minmax(0, 1fr); } }
+
+  .toc-phase { margin-top: 28px !important; }
+  .phase-list { border-left: 0 !important; display: grid; gap: 2px; }
+  .phase-list a { display: flex !important; gap: 10px; align-items: flex-start; padding: 6px 8px !important; border-left: 0 !important; border-radius: 8px; margin: 0 !important; }
+  .phase-list a:hover { background: var(--sunken); }
+  .phase-list a[aria-current='page'] { background: var(--ph-soft); color: var(--ink); font-weight: 600; }
+  .pn {
+    flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700;
+    background: var(--sunken); color: var(--text-2);
+  }
+  .phase-list a[aria-current='page'] .pn, .phase-list a.is-done .pn { background: var(--ph); color: #fff; }
+  .pt { font-size: 13.5px; line-height: 1.4; }
+</style>

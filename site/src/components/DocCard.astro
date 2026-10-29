@@ -1,0 +1,47 @@
+---
+const { d } = Astro.props;
+const AUDIENCE = { student: 'Ուսանողի համար', mentor: 'Մենթորի համար' };
+---
+<a class:list={['dcard', d.audience === 'mentor' && 'mentor-only']} href={d.href} data-audience={d.audience}>
+  <div class="dcard-cover">
+    {d.cover ? <img src={d.cover} alt="" loading="lazy" width="720" height="1018" /> : <div class="ph"></div>}
+    <span class="dcard-pages tnum">{d.pages} էջ</span>
+  </div>
+  <div class="dcard-body">
+    <div class="dcard-tags">
+      <span class:list={['tag', d.audience]}>{AUDIENCE[d.audience]}</span>
+      <span class="tag lang">{d.lang === 'ru' ? 'RU' : 'ՀԱՅ'}</span>
+    </div>
+    <h3 lang={d.lang}>{d.title}</h3>
+    <p class="variant" lang={d.lang}>{d.variant}</p>
+    <p class="meta tnum">PDF · {d.size}</p>
+  </div>
+</a>
+
+<style>
+  .dcard {
+    display: flex; flex-direction: column; text-decoration: none; color: inherit; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .dcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .dcard-cover { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--viewer-bg); border-bottom: 1px solid var(--line); }
+  .dcard-cover img {
+    position: absolute; left: 50%; top: 22px; width: 62%; height: auto; transform: translateX(-50%);
+    border-radius: 4px; box-shadow: 0 10px 30px -8px rgb(11 37 69 / 0.35), 0 0 0 1px rgb(11 37 69 / 0.06);
+    transition: transform 0.35s cubic-bezier(.2,.7,.2,1);
+  }
+  .dcard:hover .dcard-cover img { transform: translateX(-50%) translateY(-6px) rotate(-0.6deg); }
+  .dcard-pages {
+    position: absolute; right: 12px; bottom: 12px; font-size: 12px; font-weight: 650; padding: 4px 9px;
+    border-radius: 999px; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm);
+  }
+  .dcard-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .dcard-tags { display: flex; gap: 6px; margin-bottom: 6px; }
+  .tag { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: var(--sunken); color: var(--text-2); }
+  .tag.student { background: var(--accent-soft); color: var(--accent-ink); }
+  .tag.mentor { background: var(--mentor-soft); color: var(--mentor); }
+  h3 { font-size: 18px; font-family: var(--font-serif); font-weight: 600; }
+  .variant { margin: 0; color: var(--text-2); font-size: 14.5px; }
+  .meta { margin: auto 0 0; padding-top: 10px; font-size: 13px; color: var(--muted); }
+</style>

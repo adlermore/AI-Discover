@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { sessions, phases, course, tips, stats, isStudent, url } from '../lib/data.js';
+
+const groups = sessions.filter((s) => s.prompts.length);
+const hay = (p, extra = '') => `${p.id} ${p.title} ${p.text} ${extra}`.toLowerCase();
+---
+<Base title="Պրոմպտների գրադարան">
+  <div class="container">
+    <header class="page-head">
+      <span class="kicker">Պրոմպտների գրադարան</span>
+      <h1><span class="tnum">{stats.prompts}</span> պատրաստի պրոմպտ</h1>
+      <p class="lead">
+        Դասընթացի բոլոր պրոմպտները մեկ տեղում՝ ըստ պարապմունքների։ Քառակուսի փակագծերում՝ <mark class="slot">[այսպես]</mark>
+        նշված են այն տեղերը, որոնք լրացնում եք Ձեր տվյալներով։
+      </p>
+    </header>
+
+    <div class="filters" data-filters>
+      <label class="search">
+        <Icon name="search" />
+        <input type="search" placeholder="Որոնել պրոմպտներում…" data-q aria-label="Որոնում" />
+      </label>
+      <div class="seg" role="group" aria-label="Փուլ">
+        <button type="button" data-ph="" aria-pressed="true">Բոլորը</button>
+        {phases.map((p) => (
+          <button type="button" data-ph={p.letter} data-phase={p.letter} aria-pressed="false" title={p.title}><i class="dot"></i>{p.letter}</button>
+        ))}
+        {!isStudent && <button type="button" class="mentor-only" data-ph="M" aria-pressed="false">Մենթորի համար</button>}
+      </div>
+      <span class="result-count tnum" data-count></span>
+    </div>
+
+    <section class="pgroup template" data-group="T">
+      <article class="prompt-card featured" data-prompt data-filter-text={hay(course.template, 'ձևանմուշ')}>
+        <header>
+          <span class="pid"><Icon name="sparkles" /></span>
+          <div><span class="kicker">Պրոմպտի ձևանմուշ</span><h3>{course.template.title}</h3></div>
+          <button class="copy-btn" type="button" data-copy></button>
+        </header>
+        <div class="pr-body" data-prompt-text set:html={course.template.html} />
+      </article>
+    </section>
+
+    {groups.map((s) => (
+      <section class="pgroup" data-phase={s.phase} data-group={s.phase}>
+        <a class="pgroup-head" href={s.href}>
+          <span class="num-circle">{s.n}</span>
+          <span><span class="kicker ph-k">Պարապմունք {s.n} · Փուլ {s.phase} · շաբաթ {s.week}</span><b>{s.title}</b></span>
+          <Icon name="arrow-right" class="go" />
+        </a>
+        <div class="pgrid">
+          {s.prompts.map((p) => (
+            <article class="prompt-card" data-prompt data-filter-text={hay(p, s.title)}>
+              <header>
+                <span class="pid tnum">{p.id}</span>
+                <h3>{p.title}</h3>
+                <button class="copy-btn" type="button" data-copy></button>
+              </header>
+              <div class="pr-body" data-prompt-text set:html={p.html} />
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {!isStudent && (
+      <section class="pgroup mentor-only" data-group="M">
+        <a class="pgroup-head" href={url('/mentor/tips/')}>
+          <span class="num-circle mentor-n"><Icon name="mentor" /></span>
+          <span><span class="kicker mentor-k">Մենթորի համար</span><b>Յոթ պրոմպտ մենթորի համար</b></span>
+          <Icon name="arrow-right" class="go" />
+        </a>
+        <div class="pgrid">
+          {tips.prompts.map((p, i) => (
+            <article class="prompt-card" data-prompt data-filter-text={hay(p)}>
+              <header>
+                <span class="pid tnum mentor-pid">Մ{i + 1}</span>
+                <h3>{p.title}</h3>
+                <button class="copy-btn" type="button" data-copy></button>
+              </header>
+              <div class="pr-body" data-prompt-text set:html={p.html} />
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+    <p class="empty" data-empty>Ոչինչ չի գտնվել։</p>
+  </div>
+</Base>
+
+<script>
+  const bar = document.querySelector('[data-filters]');
+  const q = bar.querySelector('[data-q]');
+  const btns = [...bar.querySelectorAll('[data-ph]')];
+  const groups = [...document.querySelectorAll('[data-group]')];
+  const count = bar.querySelector('[data-count]');
+  const empty = document.querySelector('[data-empty]');
+  let phase = '';
+
+  function apply() {
+    const term = q.value.trim().toLowerCase();
+    let shown = 0;
+    const mentorOn = document.documentElement.dataset.mentor === 'on';
+    for (const g of groups) {
+      if (g.dataset.group === 'M' && !mentorOn) { g.hidden = true; continue; }
+      const groupOk = !phase || g.dataset.group === phase;
+      let any = false;
+      for (const card of g.querySelectorAll('[data-prompt]')) {
+        const ok = groupOk && (!term || card.dataset.filterText.includes(term));
+        card.hidden = !ok;
+        if (ok) { any = true; shown++; }
+      }
+      g.hidden = !any;
+    }
+    count.textContent = phase || term ? `${shown} պրոմպտ` : '';
+    empty.dataset.show = String(shown === 0);
+  }
+  btns.forEach((b) => b.addEventListener('click', () => {
+    phase = b.dataset.ph;
+    btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    apply();
+  }));
+  q.addEventListener('input', apply);
+  // Leaving mentor mode while the mentor filter is active falls back to "all".
+  document.addEventListener('mentorchange', () => {
+    if (phase === 'M' && document.documentElement.dataset.mentor !== 'on') btns[0].click();
+    else apply();
+  });
+  apply();
+</script>
+
+<style>
+  .page-head .lead mark { font-size: 0.95em; }
+  .filters { margin-top: 8px; }
+  .seg .dot { width: 9px; height: 9px; }
+  .pgroup { margin-top: 44px; }
+  .pgroup.template { margin-top: 24px; }
+  .pgroup-head { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink); margin-bottom: 14px; width: fit-content; max-width: 100%; }
+  .pgroup-head b { display: block; font-family: var(--font-serif); font-weight: 600; font-size: 21px; line-height: 1.3; }
+  .ph-k { color: var(--ph); font-size: 11.5px; }
+  .pgroup-head :global(.go) { width: 18px; height: 18px; color: var(--muted); flex: none; transition: transform 0.2s; }
+  .pgroup-head:hover :global(.go) { transform: translateX(4px); color: var(--ink); }
+  .mentor-n { background: var(--mentor); }
+  .mentor-n :global(svg) { width: 18px; height: 18px; }
+  .mentor-k { color: var(--mentor); }
+  .pgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+  @media (max-width: 860px) { .pgrid { grid-template-columns: minmax(0, 1fr); } }
+
+  .prompt-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 14px 4px; box-shadow: var(--shadow-sm); min-width: 0; }
+  .prompt-card header { display: flex; align-items: center; gap: 12px; padding: 2px 2px 10px; }
+  .prompt-card h3, .prompt-card header > div { flex: 1; min-width: 0; }
+  .prompt-card h3 { font-size: 16px; font-weight: 650; }
+  .pid {
+    flex: none; min-width: 40px; height: 28px; padding: 0 8px; border-radius: 8px; display: grid; place-items: center;
+    background: var(--prompt-bg); color: var(--prompt-ink); font-weight: 750; font-size: 13px; box-shadow: inset 0 0 0 1px var(--prompt-line);
+  }
+  .pid :global(svg) { width: 16px; height: 16px; }
+  .mentor-pid { background: var(--mentor-soft); color: var(--mentor); box-shadow: none; }
+  .prompt-card :global(.copy-btn) { position: static; flex: none; }
+  .prompt-card :global(.pr-body) { margin: 0 0 10px; font-size: 14.5px; }
+  .featured { border-color: var(--prompt-line); background: linear-gradient(180deg, var(--prompt-bg), var(--surface)); }
+  .featured h3 { font-size: 17px; }
+</style>

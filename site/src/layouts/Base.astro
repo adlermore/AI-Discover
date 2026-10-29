@@ -1,0 +1,102 @@
+---
+import '@fontsource-variable/noto-sans-armenian';
+import '@fontsource-variable/noto-serif-armenian';
+import '@fontsource-variable/noto-sans';
+import '@fontsource-variable/noto-serif';
+import '../styles/global.css';
+import '../styles/doc.css';
+import Icon from '../components/Icon.astro';
+import { isStudent, url, plan } from '../lib/data.js';
+
+const { title, description = plan.cover.sub, lang = 'hy' } = Astro.props;
+const fullTitle = title ? `${title} · AI Discover` : 'AI Discover · Steply';
+
+const NAV = [
+  { href: '/', label: 'Ընդհանուր' },
+  { href: '/program/', label: 'Ծրագիր' },
+  { href: '/course/', label: 'Դասընթաց' },
+  { href: '/prompts/', label: 'Պրոմպտներ' },
+  { href: '/mentor/guide/', match: '/mentor/', label: 'Մենթոր', mentor: true },
+  { href: '/docs/', label: 'Փաստաթղթեր' },
+].filter((n) => !(isStudent && n.mentor));
+
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const isActive = (n) => (n.href === '/' ? path === '/' : path.startsWith(n.match ?? n.href));
+---
+<!doctype html>
+<html lang={lang} data-edition={isStudent ? 'student' : 'mentor'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b2545" />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <script is:inline>
+      (() => {
+        const d = document.documentElement;
+        try {
+          const t = localStorage.getItem('aid:theme');
+          if (t === 'light' || t === 'dark') d.dataset.theme = t;
+          if (d.dataset.edition === 'mentor') {
+            const q = new URLSearchParams(location.search).get('mentor');
+            if (q === '1' || q === '0') localStorage.setItem('aid:mentor', q === '1' ? 'on' : 'off');
+            if (localStorage.getItem('aid:mentor') === 'on') d.dataset.mentor = 'on';
+          }
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="sr-only" href="#main">Անցնել բովանդակությանը</a>
+    <header class="site-header">
+      <div class="container bar">
+        <a class="brand" href={url('/')} aria-label="AI Discover — գլխավոր էջ">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span><span class="brand-name">AI Discover</span><span class="brand-sub">Steply · 1:1</span></span>
+        </a>
+        <nav class="nav" aria-label="Հիմնական նավիգացիա">
+          {NAV.map((n) => (
+            <a href={url(n.href)} class:list={[n.mentor && 'mentor-link mentor-only']} aria-current={isActive(n) ? 'page' : undefined}>{n.label}</a>
+          ))}
+        </nav>
+        <div class="header-tools">
+          {!isStudent && (
+            <button class="mentor-switch" type="button" data-mentor-toggle aria-pressed="false" aria-label="Մենթորի ռեժիմ" title="Ցույց տալ մենթորի նշումները">
+              <span class="track" aria-hidden="true"></span><span class="label">Մենթորի ռեժիմ</span>
+            </button>
+          )}
+          <button class="icon-btn theme-btn" type="button" data-theme-toggle aria-label="Փոխել թեման">
+            <Icon name="sun" /><Icon name="moon" />
+          </button>
+          <button class="icon-btn menu-btn" type="button" data-menu-toggle aria-expanded="false" aria-controls="drawer" aria-label="Մենյու">
+            <Icon name="menu" />
+          </button>
+        </div>
+      </div>
+      <nav class="drawer" id="drawer" data-open="false" aria-label="Մենյու">
+        {NAV.map((n) => (
+          <a href={url(n.href)} class:list={[n.mentor && 'mentor-only']} aria-current={isActive(n) ? 'page' : undefined}>{n.label}</a>
+        ))}
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container inner">
+        <div><b>Steply</b> — AI ավտոմատացման և ծրագրային մշակման գործակալություն, Երևան</div>
+        <div>{plan.contact.at(-1)}</div>
+      </div>
+    </footer>
+
+    <div class="tip" role="tooltip" data-tip-el></div>
+    <div class="toast" role="status" aria-live="polite" data-toast><Icon name="check" /><span></span></div>
+
+    <script>
+      import '../scripts/app.js';
+    </script>
+  </body>
+</html>

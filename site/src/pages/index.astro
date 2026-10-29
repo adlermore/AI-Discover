@@ -1,0 +1,297 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import SessionMap from '../components/SessionMap.astro';
+import Roadmap from '../components/Roadmap.astro';
+import ToolMatrix from '../components/ToolMatrix.astro';
+import FlowBar from '../components/FlowBar.astro';
+import DocCard from '../components/DocCard.astro';
+import { plan, course, phases, docs, stats, toolGroups, url } from '../lib/data.js';
+
+const [heroTitle, heroRest = ''] = plan.cover.sub.split('՝');
+const heroSub = heroRest.trim().replace(/^./, (c) => c.toLocaleUpperCase('hy'));
+const heroMeta = plan.cover.meta.filter((m) => ['Աշխատանքի ոլորտ', 'Տևողություն', 'Ձևաչափ'].includes(m.k));
+
+const live = plan.stats.find((s) => s.big.includes('ժ'));
+const tiles = [
+  { big: stats.sessions, label: 'պարապմունք՝ 90 րոպե յուրաքանչյուրը' },
+  { big: stats.weeks, label: `շաբաթ · ${stats.phases} փուլ` },
+  { big: live?.big ?? '≈ 36 ժ', label: live?.label ?? 'կենդանի պարապմունք' },
+  { big: stats.prompts, label: 'պատրաստի պրոմպտ' },
+  { big: stats.tools, label: `գործիք՝ ${toolGroups.length} ուղղությամբ` },
+  { big: '1:1', label: plan.stats.at(-1)?.label ?? '' },
+];
+const stripRange = (lead) => lead.replace(/^Պարապմունք[^։]*։\s*/, '');
+---
+<Base>
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <span class="kicker hero-kicker">{plan.cover.brand}</span>
+        <h1 class="serif">{heroTitle}</h1>
+        <p class="hero-sub">{heroSub}</p>
+        <dl class="hero-meta">
+          {heroMeta.map((m) => (<div><dt>{m.k}</dt><dd>{m.v}</dd></div>))}
+        </dl>
+        <div class="hero-cta">
+          <a class="btn btn-light" href={url('/course/')}><Icon name="layers" />Բացել դասընթացը</a>
+          <a class="btn btn-outline" href={url('/program/')}>Ծրագիրը</a>
+          <a class="btn btn-outline" href={url('/docs/')}><Icon name="file" />PDF</a>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="Առաջընթաց">
+        <div class="hp-head">
+          <svg class="ring" viewBox="0 0 44 44" aria-hidden="true">
+            <circle cx="22" cy="22" r="18" pathLength="100" class="ring-bg" />
+            <circle cx="22" cy="22" r="18" pathLength="100" class="ring-fg" data-progress-ring />
+          </svg>
+          <div class="hp-count">
+            <div><span data-progress-count class="tnum">0</span><span class="of tnum"> / {stats.sessions}</span></div>
+            <small>պարապմունք ավարտված</small>
+          </div>
+          <a class="btn btn-light btn-sm hp-go" href={url('/course/1/')} data-continue={url('/course/')}>
+            <span data-continue-label>Սկսել պարապմունք 1-ից</span><Icon name="arrow-right" />
+          </a>
+        </div>
+        <SessionMap />
+        <p class="hp-note">Սեղմեք կետին՝ պարապմունքը բացելու համար։ Առաջընթացը պահվում է այս դիտարկիչում։</p>
+      </aside>
+    </div>
+  </section>
+
+  <div class="container">
+    <section class="tiles" aria-label="Թվերով">
+      {tiles.map((t) => (
+        <div class="tile"><div class="tile-big serif tnum">{t.big}</div><div class="tile-label">{t.label}</div></div>
+      ))}
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="section-head">
+        <div><span class="kicker">Ճանապարհային քարտեզ</span><h2>12 շաբաթ մեկ հայացքով</h2></div>
+        <p>Յուրաքանչյուր շրջան՝ մեկ պարապմունք։ Մկնիկը պահեք՝ թեման և արդյունքը տեսնելու համար, սեղմեք՝ բացելու։</p>
+      </div>
+      <div class="card pad"><Roadmap /></div>
+      <div class="grid-3 months">
+        {plan.months.map((m) => (
+          <div class="month"><span class="kicker">{m.n}</span><h3>{m.title}</h3><p>{m.text}</p></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="phases">
+      <div class="section-head">
+        <div><span class="kicker">Չորս փուլ</span><h2>Ծրագրի կառուցվածքը</h2></div>
+        <p>Հիմքեր, ֆինանսներ, մեդիա, ավտոմատացում։ Յուրաքանչյուր պարապմունք ավարտվում է աշխատող արդյունքով։</p>
+      </div>
+      <div class="grid-2">
+        {phases.map((p) => (
+          <a class="phase card" data-phase={p.letter} href={url(`/course/#phase-${p.key}`)}>
+            <div class="phase-top">
+              <span class="ph-badge lg">{p.letter}</span>
+              <div>
+                <h3>{p.title}</h3>
+                <div class="phase-meta tnum">Պարապմունք {p.sessionRange} · շաբաթ {p.weekRange}</div>
+              </div>
+            </div>
+            <div class="share" aria-label={`${p.sessions.length} պարապմունք ${stats.sessions}-ից`}>
+              <div class="share-bar"><span style={`width:${(p.sessions.length / stats.sessions) * 100}%`}></span></div>
+              <span class="tnum">{p.sessions.length} / {stats.sessions}</span>
+            </div>
+            <p class="phase-lead">{stripRange(p.lead)}</p>
+            <ol class="phase-results">
+              {p.rows.map((r) => (<li><span class="tnum">{r.n}</span>{r.result}</li>))}
+            </ol>
+            <span class="phase-link">Պարապմունքները <Icon name="arrow-right" /></span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="rhythm">
+      <div class="section-head">
+        <div><span class="kicker">Պարապմունքի ռիթմը</span><h2>Ինչպես է անցնում 90 րոպեն</h2></div>
+        <p>Ցույց եմ տալիս → միասին → ինքնուրույն։ Ամեն պարապմունք ավարտվում է արդյունքով, որը պահում եք Ձեր գրադարանում։</p>
+      </div>
+      <div class="rhythm">
+        <div class="card pad"><FlowBar segments={course.flow.map((f) => ({ ...f, label: f.block }))} /></div>
+        <div class="rules">
+          <h3>Երեք կանոն, որոնք գործում են առաջին օրից</h3>
+          {course.rules.map((r, i) => (
+            <div class="rule"><span class="rule-n serif">{i + 1}</span><div><b>{r.title}</b><p>{r.text}</p></div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <div class="section-head">
+        <div><span class="kicker">Գործիքների քարտեզ</span><h2>Ո՞ր գործիքը՝ որ պարապմունքում</h2></div>
+        <p>Գունավոր վանդակը նշանակում է, որ գործիքն օգտագործվում է այդ պարապմունքում, գույնը՝ փուլը։ Աջ սյունակը ցույց է տալիս՝ քանի պարապմունքում։</p>
+      </div>
+      <div class="card pad"><ToolMatrix /></div>
+    </section>
+
+    <section class="section" id="outcomes">
+      <div class="section-head">
+        <div><span class="kicker">Արդյունք</span><h2>Ինչ կունենաք ավարտին</h2></div>
+      </div>
+      <ul class="outcomes card pad">
+        {plan.outcomes.map((o) => (<li><span class="ok"><Icon name="check" /></span>{o}</li>))}
+      </ul>
+      <h3 class="sub-h">Ավարտական նախագիծ՝ երեք ուղղություն</h3>
+      <div class="grid-3">
+        {plan.projects.map((p, i) => (
+          <div class="project card pad">
+            <span class="project-n serif">0{i + 1}</span>
+            <h4>{p.title}</h4>
+            <p>{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="docs">
+      <div class="section-head">
+        <div><span class="kicker">PDF</span><h2>Փաստաթղթեր</h2></div>
+        <p>Յուրաքանչյուր փաստաթուղթ բացվում է առանձին էջում՝ էջ առ էջ դիտելու և ներբեռնելու հնարավորությամբ։</p>
+      </div>
+      <div class="grid-3">
+        {docs.map((d) => <DocCard d={d} />)}
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* ---------------------------------------------------------------- hero */
+  .hero {
+    position: relative; overflow: hidden; color: #e6edf6; background: var(--hero);
+    --ph-a: #1b93b0; --ph-b: #ad8810; --ph-c: #9d70e6; --ph-d: #de5878;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(60% 80% at 8% 0%, rgb(27 147 176 / 0.28), transparent 60%),
+      radial-gradient(40% 60% at 70% 110%, rgb(157 112 230 / 0.22), transparent 60%),
+      radial-gradient(35% 50% at 100% 10%, rgb(222 88 120 / 0.16), transparent 60%),
+      radial-gradient(30% 40% at 45% 40%, rgb(173 136 16 / 0.10), transparent 60%);
+  }
+  .hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 70% at 30% 30%, #000 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 30% 30%, #000 20%, transparent 75%);
+  }
+  .hero-inner { position: relative; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 56px; align-items: center; padding-top: 80px; padding-bottom: 88px; }
+  .hero-kicker { color: #7fd3e6; }
+  .hero h1 { color: #fff; font-size: clamp(38px, 5.4vw, 64px); font-weight: 600; line-height: 1.08; letter-spacing: -0.02em; margin: 16px 0 18px; }
+  .hero-sub { font-size: clamp(17px, 1.6vw, 20px); color: #b8c6d9; max-width: 560px; margin-bottom: 28px; }
+  .hero-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0 0 32px; max-width: 640px; }
+  .hero-meta div { border-top: 1px solid rgb(255 255 255 / 0.16); padding-top: 10px; }
+  .hero-meta dt { font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #8193ab; margin-bottom: 4px; }
+  .hero-meta dd { margin: 0; color: #fff; font-weight: 600; font-size: 14.5px; line-height: 1.4; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn-light { background: #fff; color: #0b2545; }
+  .btn-light:hover { background: #e9f4f8; }
+  .btn-outline { border-color: rgb(255 255 255 / 0.24); color: #fff; background: rgb(255 255 255 / 0.04); }
+  .btn-outline:hover { border-color: rgb(255 255 255 / 0.5); background: rgb(255 255 255 / 0.08); }
+
+  .hero-panel {
+    border-radius: 22px; padding: 22px 22px 18px; background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.12); box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.6);
+    backdrop-filter: blur(6px);
+  }
+  .hp-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+  .ring { width: 54px; height: 54px; transform: rotate(-90deg); flex: none; }
+  .ring circle { fill: none; stroke-width: 5; }
+  .ring-bg { stroke: rgb(255 255 255 / 0.12); }
+  .ring-fg { stroke: #7fd3e6; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 0.6s cubic-bezier(.2,.7,.2,1); }
+  .hp-count div { font-size: 26px; font-weight: 700; color: #fff; line-height: 1.1; }
+  .hp-count .of { font-size: 16px; color: #8193ab; font-weight: 600; }
+  .hp-count small { color: #8fa1b9; font-size: 13px; }
+  .hp-go { margin-left: auto; }
+  .hp-note { margin: 16px 0 0; font-size: 12.5px; color: #7f91a9; }
+  @media (max-width: 980px) {
+    .hero-inner { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 56px; padding-bottom: 56px; }
+  }
+  @media (max-width: 600px) {
+    .hero-meta { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .hp-head { flex-wrap: wrap; }
+    .hp-go { margin-left: 0; width: 100%; }
+    .hero-panel { padding: 18px 14px 14px; }
+  }
+
+  /* ---------------------------------------------------------------- tiles */
+  .tiles {
+    position: relative; z-index: 2; margin-top: -36px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .tile { padding: 22px 20px; border-left: 1px solid var(--line); }
+  .tile:first-child { border-left: 0; }
+  .tile-big { font-size: 34px; font-weight: 600; color: var(--ink); line-height: 1.1; white-space: nowrap; }
+  .tile-label { margin-top: 6px; font-size: 13.5px; color: var(--text-2); line-height: 1.4; }
+  @media (max-width: 1020px) {
+    .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .tile:nth-child(4) { border-left: 0; }
+    .tile:nth-child(n + 4) { border-top: 1px solid var(--line); }
+  }
+  @media (max-width: 560px) {
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tile { border-left: 1px solid var(--line) !important; border-top: 1px solid var(--line); padding: 16px; }
+    .tile:nth-child(odd) { border-left: 0 !important; }
+    .tile:nth-child(-n + 2) { border-top: 0; }
+    .tile-big { font-size: 28px; }
+  }
+
+  /* ---------------------------------------------------------------- months */
+  .months { margin-top: 16px; }
+  .month { padding: 18px 20px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--line); }
+  .month h3 { font-size: 17px; margin: 6px 0 8px; }
+  .month p { margin: 0; font-size: 14.5px; color: var(--text-2); }
+
+  /* ---------------------------------------------------------------- phases */
+  .phase { display: flex; flex-direction: column; gap: 14px; padding: 24px; text-decoration: none; color: inherit; position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+  .phase::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--ph); }
+  .phase:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .phase-top { display: flex; gap: 16px; align-items: center; }
+  .phase h3 { font-size: 20px; font-family: var(--font-serif); font-weight: 600; }
+  .phase-meta { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+  .share { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-2); font-weight: 600; }
+  .share-bar { flex: 1; height: 8px; border-radius: 999px; background: var(--sunken); overflow: hidden; }
+  .share-bar span { display: block; height: 100%; background: var(--ph); border-radius: 0 4px 4px 0; }
+  .phase-lead { margin: 0; color: var(--text-2); font-size: 15px; }
+  .phase-results { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+  .phase-results li { display: flex; gap: 10px; align-items: baseline; }
+  .phase-results li span {
+    flex: none; min-width: 26px; height: 20px; padding: 0 6px; border-radius: 999px; display: inline-grid; place-items: center;
+    background: var(--ph-soft); color: var(--ph); font-size: 11.5px; font-weight: 750;
+  }
+  .phase-link { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-weight: 650; font-size: 14.5px; color: var(--ph); }
+  .phase-link svg { width: 16px; height: 16px; transition: transform 0.2s; }
+  .phase:hover .phase-link svg { transform: translateX(4px); }
+
+  /* ---------------------------------------------------------------- rhythm */
+  .rhythm { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  .rules { display: grid; gap: 10px; }
+  .rules h3 { font-size: 16px; margin: 4px 0 4px; color: var(--text-2); font-weight: 600; }
+  .rule { display: flex; gap: 14px; padding: 16px 18px; border-radius: var(--radius); background: var(--accent-soft); }
+  .rule-n { font-size: 28px; line-height: 1; color: var(--accent-ink); font-weight: 600; }
+  .rule b { color: var(--ink); display: block; margin-bottom: 2px; }
+  .rule p { margin: 0; font-size: 14.5px; color: var(--text-2); }
+  @media (max-width: 980px) { .rhythm { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ---------------------------------------------------------------- outcomes */
+  .outcomes { list-style: none; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 32px; }
+  .outcomes li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15.5px; }
+  .ok { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--good-soft); color: var(--good); margin-top: 1px; }
+  .ok svg { width: 14px; height: 14px; }
+  @media (max-width: 760px) { .outcomes { grid-template-columns: minmax(0, 1fr); } }
+  .sub-h { font-size: 20px; margin: 36px 0 14px; font-family: var(--font-serif); font-weight: 600; }
+  .project-n { font-size: 30px; color: var(--ph-b); font-weight: 600; line-height: 1; }
+  .project h4 { font-size: 18px; margin: 10px 0 8px; }
+  .project p { margin: 0; color: var(--text-2); font-size: 15px; }
+</style>

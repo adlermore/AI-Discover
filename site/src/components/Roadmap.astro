@@ -1,0 +1,102 @@
+---
+// 12-week roadmap: one row per phase, one column per week, months on top.
+import { phases, plan, WEEKS } from '../lib/data.js';
+const months = plan.months.map((m, i) => ({ ...m, from: i * 4 + 1, to: Math.min(WEEKS, i * 4 + 4) }));
+---
+<div class="scroll-x">
+  <div class="rm" style={`--weeks:${WEEKS}`}>
+    <div class="rm-months">
+      <span class="rm-label"></span>
+      <div class="rm-grid">
+        {months.map((m) => (
+          <span class="rm-month" style={`grid-column:${m.from} / ${m.to + 1}`} data-tip-title={m.title} data-tip={m.text} tabindex="0">
+            <b>{m.n}</b>{m.title}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    {phases.map((p) => (
+      <div class="rm-row" data-phase={p.letter}>
+        <div class="rm-label">
+          <span class="ph-badge">{p.letter}</span>
+          <span>
+            <b>{p.short}</b>
+            <small class="tnum">Պարապմունք {p.sessionRange} · շաբաթ {p.weekRange}</small>
+          </span>
+        </div>
+        <div class="rm-grid rm-track">
+          <span class="rm-span" style={`grid-column:${p.weeks[0]} / ${p.weeks.at(-1) + 1}`}></span>
+          {p.weeks.map((w) => (
+            <div class="rm-cell" style={`grid-column:${w}`}>
+              {p.sessions.filter((s) => s.week === w).map((s) => (
+                <a
+                  class="rm-pill"
+                  href={s.href}
+                  data-session={s.n}
+                  data-tip-meta={`Պարապմունք ${s.n} · շաբաթ ${s.week}`}
+                  data-tip-title={s.title}
+                  data-tip={s.result ? `Արդյունք՝ ${s.result}` : ''}
+                  aria-label={`Պարապմունք ${s.n}․ ${s.title}`}
+                >{s.n}</a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    <div class="rm-axis">
+      <span class="rm-label">շաբաթ</span>
+      <div class="rm-grid">
+        {Array.from({ length: WEEKS }, (_, i) => <span class="tnum">{i + 1}</span>)}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rm { min-width: 760px; }
+  .rm-months, .rm-row, .rm-axis { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 16px; align-items: center; }
+  .rm-grid { display: grid; grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); }
+  .rm-months { margin-bottom: 6px; }
+  .rm-month {
+    margin: 0 3px; padding: 8px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line);
+    font-size: 13px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default;
+  }
+  .rm-month b { color: var(--ink); margin-right: 8px; }
+  .rm-row { padding: 6px 0; border-top: 1px dashed var(--line); }
+  .rm-row:first-of-type { border-top: 0; }
+  .rm-label { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .rm-label b { display: block; color: var(--ink); font-size: 15px; line-height: 1.25; }
+  .rm-label small { display: block; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+  .rm-track {
+    position: relative; min-height: 64px; align-items: center;
+    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+    background-size: calc(100% / var(--weeks)) 100%;
+  }
+  .rm-span { grid-row: 1; align-self: stretch; margin: 8px 3px; border-radius: 12px; background: var(--ph-soft); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ph) 30%, transparent); }
+  .rm-cell { grid-row: 1; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 4px; padding: 14px 2px; z-index: 1; }
+  .rm-pill {
+    width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; text-decoration: none;
+    background: var(--ph); color: #fff; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;
+    box-shadow: 0 0 0 2px var(--surface); transition: transform 0.15s;
+  }
+  .rm-pill:hover, .rm-pill:focus-visible { transform: scale(1.15); outline: none; }
+  /* Completed sessions turn into outlined rings, so the remaining work stays solid. */
+  .rm-pill.is-done { background: var(--surface); color: var(--ph); box-shadow: 0 0 0 2px var(--surface), inset 0 0 0 2px var(--ph); }
+  .rm-axis { margin-top: 2px; }
+  .rm-axis .rm-label { font-size: 12px; color: var(--muted); justify-content: flex-end; }
+  .rm-axis .rm-grid span { text-align: center; font-size: 12px; color: var(--muted); }
+  /* Narrow screens: letter badges only, so most of the 12 weeks stay in view. */
+  @media (max-width: 720px) {
+    .rm { min-width: 560px; }
+    .rm-months, .rm-row, .rm-axis { grid-template-columns: 32px minmax(0, 1fr); gap: 8px; }
+    .rm-label > span:not(.ph-badge) { display: none; }
+    .rm-axis .rm-label { visibility: hidden; }
+    .rm-month { font-size: 12px; padding: 6px 8px; }
+    .rm-track { min-height: 52px; }
+    .rm-pill { width: 22px; height: 22px; font-size: 10.5px; }
+    .rm-cell { padding: 10px 1px; gap: 3px; }
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+// The 24 sessions laid out by week — the hero's progress map.
+import { sessions, phases, WEEKS } from '../lib/data.js';
+const byWeek = Array.from({ length: WEEKS }, (_, i) => sessions.filter((s) => s.week === i + 1));
+---
+<div class="smap" style={`--weeks:${WEEKS}`}>
+  <div class="smap-grid">
+    {byWeek.map((list, i) => (
+      <div class="smap-col">
+        <div class="smap-dots">
+          {list.map((s) => (
+            <a
+              href={s.href}
+              class="smap-dot"
+              data-phase={s.phase}
+              data-session={s.n}
+              data-next-session={s.n}
+              data-tip-meta={`Պարապմունք ${s.n} · շաբաթ ${s.week}`}
+              data-tip-title={s.title}
+              data-tip={s.result}
+              aria-label={`Պարապմունք ${s.n}․ ${s.title}`}
+            >{s.n}</a>
+          ))}
+        </div>
+        <span class="smap-wk tnum">{i + 1}</span>
+      </div>
+    ))}
+  </div>
+  <div class="smap-phases" aria-hidden="true">
+    {phases.map((p) => (
+      <span data-phase={p.letter} style={`grid-column:${p.weeks[0]} / ${p.weeks.at(-1) + 1}`}>
+        <i></i><b>{p.letter}</b>{p.weeks.length > 1 && <em>{p.short}</em>}
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .smap-grid, .smap-phases { display: grid; grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); gap: 4px; }
+  .smap-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .smap-dots { display: flex; flex-direction: column-reverse; gap: 5px; height: 104px; justify-content: flex-start; }
+  .smap-dot {
+    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; text-decoration: none;
+    font-size: 11.5px; font-weight: 700; font-variant-numeric: tabular-nums; color: rgb(255 255 255 / 0.85);
+    background: color-mix(in srgb, var(--ph) 22%, transparent); box-shadow: inset 0 0 0 1.5px var(--ph);
+    transition: transform 0.15s, background 0.2s;
+  }
+  .smap-dot:hover, .smap-dot:focus-visible { transform: scale(1.12); outline: none; }
+  .smap-dot.is-done { background: var(--ph); color: #fff; box-shadow: inset 0 0 0 1.5px var(--ph), 0 0 0 3px rgb(255 255 255 / 0.06); }
+  .smap-dot.is-next { color: #fff; box-shadow: inset 0 0 0 2px #fff, 0 0 0 4px color-mix(in srgb, var(--ph) 55%, transparent); }
+  @media (prefers-reduced-motion: no-preference) {
+    .smap-dot.is-next { animation: pulse 2.2s ease-in-out infinite; }
+  }
+  @keyframes pulse { 50% { box-shadow: inset 0 0 0 2px #fff, 0 0 0 8px color-mix(in srgb, var(--ph) 18%, transparent); } }
+  .smap-wk { font-size: 11px; color: rgb(255 255 255 / 0.45); }
+  .smap-phases { margin-top: 10px; }
+  .smap-phases span { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 12px; color: rgb(255 255 255 / 0.7); padding-top: 8px; position: relative; }
+  .smap-phases i { position: absolute; top: 0; left: 2px; right: 2px; height: 3px; border-radius: 3px; background: var(--ph); }
+  .smap-phases b { color: #fff; }
+  .smap-phases em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 520px) {
+    .smap-dot { width: 22px; height: 22px; font-size: 9.5px; }
+    .smap-dots { height: 80px; gap: 4px; }
+    .smap-grid { gap: 2px; }
+    .smap-phases em { display: none; }
+  }
+</style>

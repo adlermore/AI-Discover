@@ -1,0 +1,137 @@
+---
+// Tool × session matrix. A filled cell = the tool is used in that session;
+// its colour is the session's phase. The bar on the right counts sessions.
+import { sessions, phases, toolGroups, allTools } from '../lib/data.js';
+const max = Math.max(...allTools.map((t) => t.sessions.length));
+const cols = sessions.length;
+---
+<div class="mx-wrap">
+  <div class="scroll-x">
+    <div class="mx" style={`--cols:${cols}`} data-matrix>
+      <span class="mx-corner"></span>
+      {phases.map((p) => (
+        <span class="mx-phase" data-phase={p.letter} style={`grid-column: span ${p.sessions.length}`}>
+          <b>{p.letter}</b><em>{p.short}</em>
+        </span>
+      ))}
+      <span class="mx-head-count"></span>
+
+      <span class="mx-corner"></span>
+      {sessions.map((s) => (
+        <a class="mx-colhead tnum" href={s.href} data-col={s.n} data-tip-meta={`Պարապմունք ${s.n} · ${s.phaseName}`} data-tip-title={s.title} data-tip={s.toolsRaw}>{s.n}</a>
+      ))}
+      <span class="mx-head-count">պարապմունք</span>
+
+      {toolGroups.map((g) => (
+        <>
+          <span class="mx-group">{g.group}</span>
+          {g.tools.map((t) => (
+            <div class="mx-row">
+              <span class="mx-tool">{t.name}</span>
+              {sessions.map((s) =>
+                t.sessions.includes(s.n) ? (
+                  <a
+                    class="mx-cell on"
+                    href={s.href}
+                    data-phase={s.phase}
+                    data-col={s.n}
+                    data-tip-meta={`${t.name} · պարապմունք ${s.n}`}
+                    data-tip-title={s.title}
+                    aria-label={`${t.name}, պարապմունք ${s.n}`}
+                  ></a>
+                ) : s.allTools ? (
+                  <span class="mx-cell all" data-col={s.n} data-tip-meta={`Պարապմունք ${s.n}`} data-tip-title={s.title} data-tip="Գործիքներ՝ ամբողջ փաթեթը"></span>
+                ) : (
+                  <span class="mx-cell" data-col={s.n}></span>
+                ),
+              )}
+              <span class="mx-count">
+                <span class="track"><span class="bar" style={`width:${(t.sessions.length / max) * 100}%`}></span></span>
+                <span class="v tnum">{t.sessions.length}</span>
+              </span>
+            </div>
+          ))}
+        </>
+      ))}
+    </div>
+  </div>
+
+  <div class="mx-legend">
+    {phases.map((p) => (
+      <span data-phase={p.letter}><i class="dot"></i>{p.letter} · {p.short}</span>
+    ))}
+    <span><i class="dot hatch"></i>Պարապմունք 14՝ ամբողջ փաթեթը</span>
+  </div>
+
+  <details class="mx-table">
+    <summary>Ցույց տալ աղյուսակով</summary>
+    <div class="doc">
+      <div class="table-wrap">
+        <table>
+          <tr><th style="width:34%">Գործիք</th><th style="width:16%">Քանակ</th><th>Պարապմունքներ</th></tr>
+          {allTools.map((t) => (
+            <tr><td class="b">{t.name}</td><td class="tnum">{t.sessions.length}</td><td class="tnum">{t.sessions.join(', ')}</td></tr>
+          ))}
+        </table>
+      </div>
+    </div>
+  </details>
+</div>
+
+<script>
+  // Highlight the hovered session column across all rows.
+  document.querySelectorAll('[data-matrix]').forEach((mx) => {
+    let col = null;
+    const set = (c) => {
+      if (c === col) return;
+      if (col) mx.querySelectorAll(`[data-col="${col}"]`).forEach((el) => el.classList.remove('col-hl'));
+      col = c;
+      if (col) mx.querySelectorAll(`[data-col="${col}"]`).forEach((el) => el.classList.add('col-hl'));
+    };
+    mx.addEventListener('pointerover', (e) => set(e.target.closest('[data-col]')?.dataset.col ?? null));
+    mx.addEventListener('pointerleave', () => set(null));
+  });
+</script>
+
+<style>
+  .mx {
+    display: grid; grid-template-columns: 150px repeat(var(--cols), minmax(20px, 1fr)) 132px;
+    gap: 3px; min-width: 860px; align-items: center;
+  }
+  .mx-row { display: contents; }
+  .mx-phase {
+    display: flex; align-items: center; gap: 6px; min-width: 0; padding: 4px 6px 6px; margin-bottom: 2px;
+    border-top: 3px solid var(--ph); font-size: 12px; color: var(--text-2);
+  }
+  .mx-phase b { color: var(--ink); }
+  .mx-phase em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mx-colhead {
+    text-align: center; font-size: 11.5px; color: var(--muted); text-decoration: none; padding: 2px 0; border-radius: 5px;
+  }
+  .mx-colhead.col-hl { background: var(--ink); color: var(--bg); }
+  .mx-head-count { font-size: 11.5px; color: var(--muted); padding-left: 12px; }
+  .mx-group {
+    grid-column: 1 / -1; margin-top: 14px; padding-bottom: 2px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  .mx-tool { font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; }
+  .mx-cell { height: 22px; border-radius: 5px; background: var(--sunken); display: block; }
+  .mx-cell.on { background: var(--ph); transition: transform 0.12s; }
+  .mx-cell.on:hover, .mx-cell.on:focus-visible { transform: scale(1.18); outline: none; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--ph); }
+  .mx-cell.all, .dot.hatch {
+    background: repeating-linear-gradient(135deg, var(--sunken) 0 3px, color-mix(in srgb, var(--ph-b) 38%, var(--sunken)) 3px 5px);
+  }
+  .mx-cell.col-hl:not(.on) { background-color: color-mix(in srgb, var(--ink) 10%, var(--sunken)); }
+  .mx-row:hover .mx-tool { color: var(--ink); font-weight: 650; }
+  .mx-row:hover .mx-cell:not(.on) { background-color: color-mix(in srgb, var(--ink) 8%, var(--sunken)); }
+  .mx-count { display: flex; align-items: center; gap: 8px; padding-left: 12px; }
+  .mx-count .track { width: 84px; flex: none; }
+  .mx-count .bar { display: block; height: 10px; border-radius: 0 4px 4px 0; background: var(--ink); opacity: 0.72; min-width: 3px; }
+  .mx-count .v { font-size: 13px; font-weight: 650; color: var(--ink); }
+  .mx-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px; font-size: 13.5px; color: var(--text-2); }
+  .mx-legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .mx-legend .dot { width: 14px; height: 14px; border-radius: 4px; }
+  .mx-table { margin-top: 14px; }
+  .mx-table summary { cursor: pointer; color: var(--accent-ink); font-weight: 600; font-size: 14px; width: fit-content; }
+  .mx-table .doc { margin-top: 10px; }
+</style>

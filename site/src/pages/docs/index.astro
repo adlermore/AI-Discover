@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import DocCard from '../../components/DocCard.astro';
+import { docs, isStudent } from '../../lib/data.js';
+
+const student = docs.filter((d) => d.audience === 'student');
+const mentor = docs.filter((d) => d.audience === 'mentor');
+const totalPages = (list) => list.reduce((a, d) => a + d.pages, 0);
+---
+<Base title="Փաստաթղթեր">
+  <div class="container">
+    <header class="page-head">
+      <span class="kicker">PDF գրադարան</span>
+      <h1>Փաստաթղթեր</h1>
+      <p class="lead">Դասընթացի բոլոր նյութերը PDF ձևաչափով։ Յուրաքանչյուր փաստաթուղթ բացվում է առանձին էջում՝ էջ առ էջ դիտելու, մեծացնելու և ներբեռնելու հնարավորությամբ։</p>
+    </header>
+
+    <section class="group">
+      <div class="group-head">
+        <h2>Ուսանողի համար</h2>
+        <span class="tnum">{student.length} փաստաթուղթ · {totalPages(student)} էջ</span>
+      </div>
+      <div class="grid-3">{student.map((d) => <DocCard d={d} />)}</div>
+    </section>
+
+    {!isStudent && (
+      <>
+        <section class="group mentor-only">
+          <div class="group-head">
+            <h2>Մենթորի համար</h2>
+            <span class="tnum">{mentor.length} փաստաթուղթ · {totalPages(mentor)} էջ</span>
+          </div>
+          <div class="grid-3">{mentor.map((d) => <DocCard d={d} />)}</div>
+        </section>
+        <p class="mentor-hint">
+          Մենթորի {mentor.length} փաստաթղթերը երևում են մենթորի ռեժիմում։
+          <button type="button" data-mentor-toggle aria-pressed="false">Միացնել</button>
+        </p>
+      </>
+    )}
+  </div>
+</Base>
+
+<style>
+  .group { margin-top: 36px; }
+  .group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .group-head h2 { font-family: var(--font-serif); font-weight: 600; font-size: 24px; }
+  .group-head span { color: var(--muted); font-size: 14px; }
+  .mentor-hint { margin-top: 40px; color: var(--muted); font-size: 14.5px; }
+  .mentor-hint button { border: 0; background: none; padding: 0; color: var(--mentor); font-weight: 650; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  :global(html[data-mentor='on']) .mentor-hint { display: none; }
+</style>

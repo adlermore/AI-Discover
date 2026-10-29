@@ -1,0 +1,85 @@
+---
+import Base from '../../layouts/Base.astro';
+import DocArticle from '../../components/DocArticle.astro';
+import { guide, tips, docs, url } from '../../lib/data.js';
+
+export function getStaticPaths() {
+  // Mentor material is left out of the student edition entirely.
+  if (process.env.EDITION === 'student') return [];
+  return [{ params: { page: 'guide' } }, { params: { page: 'tips' } }];
+}
+
+const { page } = Astro.params;
+const pdf = (slug) => docs.find((d) => d.slug === slug);
+const panes = page === 'guide'
+  ? [
+      { lang: 'hy', doc: guide.hy, pdf: pdf('mentor-guide'), label: 'Հայերեն' },
+      { lang: 'ru', doc: guide.ru, pdf: pdf('mentor-guide-ru'), label: 'Русский' },
+    ]
+  : [{ lang: 'hy', doc: tips, pdf: pdf('mentor-tips') }];
+const title = panes[0].doc.cover.title;
+---
+<Base title={title} description={panes[0].doc.cover.sub}>
+  <div class="container mentor-tabs">
+    <span class="mentor-flag">Մենթորի համար</span>
+    <nav class="seg" aria-label="Մենթորի նյութեր">
+      <a href={url('/mentor/guide/')} aria-current={page === 'guide' ? 'page' : undefined}>{guide.hy.cover.title}</a>
+      <a href={url('/mentor/tips/')} aria-current={page === 'tips' ? 'page' : undefined}>{tips.cover.title}</a>
+    </nav>
+  </div>
+
+  {panes.map((p, i) => (
+    <div data-lang-pane={p.lang} hidden={i > 0}>
+      <DocArticle
+        kicker={p.doc.cover.brand}
+        title={p.doc.cover.title}
+        sub={p.doc.cover.sub}
+        meta={p.doc.cover.meta}
+        toc={p.doc.toc}
+        html={p.doc.html}
+        lang={p.lang}
+        pdf={p.pdf}
+        tocTitle={p.lang === 'ru' ? 'Содержание' : 'Բովանդակություն'}
+      >
+        {panes.length > 1 && (
+          <div slot="actions" class="seg lang-switch" role="group" aria-label="Լեզու / Язык">
+            {panes.map((q) => (
+              <button type="button" data-set-lang={q.lang} aria-pressed={String(q.lang === p.lang)}>{q.label}</button>
+            ))}
+          </div>
+        )}
+      </DocArticle>
+    </div>
+  ))}
+</Base>
+
+<script>
+  const panes = [...document.querySelectorAll('[data-lang-pane]')];
+  if (panes.length > 1) {
+    const show = (lang) => {
+      panes.forEach((p) => (p.hidden = p.dataset.langPane !== lang));
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('aid:guide-lang', lang); } catch {}
+      dispatchEvent(new Event('scroll'));
+    };
+    let initial = new URLSearchParams(location.search).get('lang');
+    try { initial ||= localStorage.getItem('aid:guide-lang'); } catch {}
+    if (initial === 'ru' || initial === 'hy') show(initial);
+    document.querySelectorAll('[data-set-lang]').forEach((b) =>
+      b.addEventListener('click', () => { show(b.dataset.setLang); scrollTo({ top: 0 }); }),
+    );
+  }
+</script>
+
+<style>
+  .mentor-tabs { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding-top: 28px; }
+  .mentor-flag {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--mentor); background: var(--mentor-soft); padding: 6px 12px; border-radius: 999px;
+  }
+  .seg a {
+    display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border-radius: 9px;
+    font-size: 14px; font-weight: 600; color: var(--text-2); text-decoration: none;
+  }
+  .seg a[aria-current='page'] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
+</style>

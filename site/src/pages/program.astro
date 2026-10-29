@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import DocArticle from '../components/DocArticle.astro';
+import { plan, docs } from '../lib/data.js';
+
+const meta = plan.cover.meta.filter((m) => !m.v.startsWith('['));
+---
+<Base title={plan.cover.title}>
+  <DocArticle
+    kicker={plan.cover.brand}
+    title={plan.cover.title}
+    sub={plan.cover.sub}
+    meta={meta}
+    toc={plan.article.toc}
+    html={plan.article.html}
+    pdf={docs.find((d) => d.slug === 'plan')}
+  />
+</Base>

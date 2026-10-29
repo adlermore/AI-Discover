@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/data.js';
+---
+<Base title="Էջը չի գտնվել">
+  <div class="container narrow page-head" style="text-align:center;padding-top:120px">
+    <span class="kicker">404</span>
+    <h1>Էջը չի գտնվել</h1>
+    <p class="lead" style="margin:0 auto 28px">Հնարավոր է՝ հղումը փոխվել է։</p>
+    <a class="btn btn-primary" href={url('/')}>Գլխավոր էջ</a>
+  </div>
+</Base>
